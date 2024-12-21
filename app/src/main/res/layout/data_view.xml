@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txtTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtGPSFix"
+        app:layout_constraintTop_toBottomOf="@+id/txtLon"
+        tools:text="0000-00-00T00:00:00Z" />
+
+    <TextView
+        android:id="@+id/txtAtmo"
+        android:layout_width="88dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="48dp"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="0000.0" />
+
+    <TextView
+        android:id="@+id/txtHum"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblTemp"
+        tools:text="00.0" />
+
+    <TextView
+        android:id="@+id/txtTemp"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/txtHum"
+        app:layout_constraintStart_toEndOf="@+id/txtAtmo"
+        app:layout_constraintTop_toBottomOf="@+id/lblAtmo"
+        tools:text="00.0" />
+
+    <TextView
+        android:id="@+id/txtHeap"
+        android:layout_width="104dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="48dp"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="24sp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTime"
+        tools:text="000,000" />
+
+    <TextView
+        android:id="@+id/txtRPM"
+        android:layout_width="104dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="48dp"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtAtmo"
+        tools:text="0000" />
+
+    <TextView
+        android:id="@+id/txtEngineH"
+        android:layout_width="128dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtRPM"
+        tools:text="00000:00" />
+
+    <TextView
+        android:id="@+id/txtCan"
+        android:layout_width="168dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtHeap"
+        tools:text="000(000)" />
+
+    <TextView
+        android:id="@+id/txtLat"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="48dp"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtRPM"
+        tools:text="000,000000" />
+
+    <TextView
+        android:id="@+id/txtLon"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtLat"
+        tools:text="000,000000" />
+
+    <TextView
+        android:id="@+id/txtSog"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtLat"
+        tools:text="00.0" />
+
+    <TextView
+        android:id="@+id/txtCog"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSog"
+        tools:text="000.0" />
+
+    <TextView
+        android:id="@+id/lblTimeUTC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_time_utc_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtTime"
+        app:layout_constraintEnd_toEndOf="@+id/txtTime" />
+
+    <TextView
+        android:id="@+id/lblAtmo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_atmo_pressure_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtAtmo"
+        app:layout_constraintEnd_toEndOf="@+id/txtAtmo" />
+
+        <TextView
+        android:id="@+id/lblTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_temperature_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtTemp"
+        app:layout_constraintEnd_toEndOf="@+id/txtTemp" />
+
+    <TextView
+        android:id="@+id/lblHum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_humidity_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtHum"
+        app:layout_constraintEnd_toEndOf="@id/txtHum" />
+
+    <TextView
+        android:id="@+id/lblHeap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_heap_label"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/txtHeap"
+        app:layout_constraintEnd_toEndOf="@+id/txtHeap" />
+
+    <TextView
+        android:id="@+id/lblRPM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_rpm_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtRPM"
+        app:layout_constraintEnd_toEndOf="@+id/txtRPM" />
+
+    <TextView
+        android:id="@+id/lblEngineH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_engine_h_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtEngineH"
+        app:layout_constraintEnd_toEndOf="@+id/txtEngineH" />
+
+    <TextView
+        android:id="@+id/lblCan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_canbus_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtCan"
+        app:layout_constraintEnd_toEndOf="@id/txtCan" />
+
+    <TextView
+        android:id="@+id/lblLat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_latitude_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtLat"
+        app:layout_constraintEnd_toEndOf="@+id/txtLat" />
+
+    <TextView
+        android:id="@+id/lblLon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_longitude_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtLon"
+        app:layout_constraintEnd_toEndOf="@+id/txtLon" />
+
+    <TextView
+        android:id="@+id/lblSog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_sog_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtSog"
+        app:layout_constraintEnd_toEndOf="@+id/txtSog" />
+
+    <TextView
+        android:id="@+id/lblCOG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_cog_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtCog"
+        app:layout_constraintEnd_toEndOf="@+id/txtCog" />
+
+    <TextView
+        android:id="@+id/txtGPSFix"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/NO_VALUE_STRING"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtLon"
+        tools:text="XX" />
+
+    <TextView
+        android:id="@+id/lblGPSFix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fix"
+        app:layout_constraintBottom_toTopOf="@+id/txtGPSFix"
+        app:layout_constraintStart_toStartOf="@+id/txtGPSFix" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

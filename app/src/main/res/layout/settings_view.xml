@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/editDeviceName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSaveDeviceName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/lblEditDeviceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/device_name_edit_label"
+        app:layout_constraintBottom_toTopOf="@+id/editDeviceName"
+        app:layout_constraintStart_toStartOf="@+id/editDeviceName" />
+
+    <Button
+        android:id="@+id/buttonSaveDeviceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/apply_button_label"
+        app:layout_constraintBottom_toBottomOf="@+id/editDeviceName"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <EditText
+        android:id="@+id/editEngineHours"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSaveEngineHours"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editDeviceName" />
+
+
+    <TextView
+        android:id="@+id/lblEditEngineHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/engine_hours_edit_label"
+        app:layout_constraintBottom_toTopOf="@+id/editEngineHours"
+        app:layout_constraintStart_toStartOf="@+id/editEngineHours" />
+
+    <Button
+        android:id="@+id/buttonSaveEngineHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/apply_button_label"
+        app:layout_constraintBottom_toBottomOf="@+id/editEngineHours"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/apply_button_label"
+        app:layout_constraintBottom_toBottomOf="@+id/checkBoxEnableRPM"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/checkBoxEnableGPS"
+        android:layout_width="80dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/gps_switch"
+        android:textAlignment="viewStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editRPMAdjustment" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/checkBoxEnableDHT"
+        android:layout_width="80dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/dht_switch"
+        android:textAlignment="viewStart"
+        app:layout_constraintStart_toStartOf="@+id/checkBoxEnableSysTime"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxEnableSysTime" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/checkBoxEnableBMP"
+        android:layout_width="80dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/bmp_switch"
+        android:textAlignment="viewStart"
+        app:layout_constraintStart_toEndOf="@+id/checkBoxEnableDHT"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxEnableDHT" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/checkBoxEnableSTW"
+        android:layout_width="80dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/stw_switch"
+        android:textAlignment="viewStart"
+        app:layout_constraintStart_toEndOf="@+id/checkBoxEnableGPS"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxEnableGPS" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/checkBoxEnableSysTime"
+        android:layout_width="80dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/time_switch"
+        android:textAlignment="viewStart"
+        app:layout_constraintStart_toStartOf="@+id/checkBoxEnableGPS"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxEnableGPS" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/checkBoxEnableRPM"
+        android:layout_width="80dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/rpm_switch"
+        android:textAlignment="viewStart"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/checkBoxEnableSysTime"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxEnableSysTime" />
+
+    <EditText
+        android:id="@+id/editRPMCalibration"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSaveRPMCalibration"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editEngineHours" />
+
+    <Button
+        android:id="@+id/buttonSaveRPMCalibration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="@string/apply_button_label"
+        app:layout_constraintBottom_toBottomOf="@+id/editRPMCalibration"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/lblRPMCalibration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rpm_calibration_edit_label"
+        app:layout_constraintBottom_toTopOf="@+id/editRPMCalibration"
+        app:layout_constraintStart_toStartOf="@+id/editRPMCalibration" />
+
+    <EditText
+        android:id="@+id/editRPMAdjustment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSaveRPMAdjustment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editRPMCalibration" />
+
+    <TextView
+        android:id="@+id/lblRPMAdjustment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RPM Adjustment"
+        app:layout_constraintBottom_toTopOf="@+id/editRPMAdjustment"
+        app:layout_constraintStart_toStartOf="@+id/editRPMAdjustment" />
+
+    <Button
+        android:id="@+id/buttonSaveRPMAdjustment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Set"
+        app:layout_constraintBottom_toBottomOf="@+id/editRPMAdjustment"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/txtRpmAdj_Settings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/NO_VALUE_STRING"
+        android:textAlignment="viewEnd"
+        app:layout_constraintBottom_toTopOf="@+id/editRPMAdjustment"
+        app:layout_constraintEnd_toEndOf="@+id/editRPMAdjustment"
+        app:layout_constraintStart_toEndOf="@+id/lblRPMAdjustment" />
+
+    <TextView
+        android:id="@+id/txtRpm_Settings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/NO_VALUE_STRING"
+        android:textAlignment="viewEnd"
+        app:layout_constraintBottom_toTopOf="@+id/editRPMCalibration"
+        app:layout_constraintEnd_toEndOf="@+id/editRPMCalibration"
+        app:layout_constraintStart_toEndOf="@+id/lblRPMCalibration" />
+
+    <TextView
+        android:id="@+id/txtEngineH_Settings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/NO_VALUE_STRING"
+        android:textAlignment="viewEnd"
+        app:layout_constraintBottom_toTopOf="@+id/editEngineHours"
+        app:layout_constraintEnd_toEndOf="@+id/editEngineHours"
+        app:layout_constraintStart_toEndOf="@+id/lblEditEngineHours" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
