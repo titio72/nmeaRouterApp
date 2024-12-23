@@ -91,8 +91,8 @@ class N2KSettingsView(context: Context, ble: BLEThing) : N2KCardPage(context, bl
 
     override fun onStatus(status: BLELifecycleState, scanning: Boolean) {
         post {
-            enableButtons(status == BLELifecycleState.On)
-            if (status == BLELifecycleState.On) {
+            enableButtons(status == BLELifecycleState.Connected)
+            if (status == BLELifecycleState.Connected) {
                 editDeviceName.text = ble.getConnectedDevice()?.name?.toEditable() ?: "".toEditable()
             } else {
                 editDeviceName.text = "".toEditable()

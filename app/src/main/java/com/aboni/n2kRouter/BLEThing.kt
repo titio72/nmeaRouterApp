@@ -344,7 +344,7 @@ class BLEThingImpl(private val context: Context): BLEThing {
             characteristicConf = service.getCharacteristic(CHARACTERISTIC_CONF_UUID)
             characteristicData = service.getCharacteristic(CHARACTERISTIC_DATA_UUID)
             characteristicCommand = service.getCharacteristic(CHARACTERISTIC_CMD_UUID)
-            lifecycleStatus = BLELifecycleState.On
+            lifecycleStatus = BLELifecycleState.Connected
             read(0, gatt)
         }
 

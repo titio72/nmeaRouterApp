@@ -126,7 +126,7 @@ class MainActivity : BLEN2KListener, BLEApp() {
     }
 
     private fun updateBTView() {
-        btDeviceTxtView.highlighted = ble.getStatus() == BLELifecycleState.On
+        btDeviceTxtView.highlighted = ble.getStatus() == BLELifecycleState.Connected
         btDeviceTxtView.deviceItem = ble.getConnectedDevice() ?: NO_DEVICE
     }
 

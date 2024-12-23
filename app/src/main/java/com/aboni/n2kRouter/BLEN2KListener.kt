@@ -4,7 +4,7 @@ enum class BLELifecycleState {
     Off,
     Connect,
     Discover,
-    On
+    Connected
 }
 
 interface BLEN2KListener {

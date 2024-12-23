@@ -3,7 +3,6 @@ package com.aboni.n2kRouter
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.allViews
 import androidx.core.view.get
 import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -111,7 +110,7 @@ class N2KScanView(context: Context, ble: BLEThing) : N2KCardPage(context, ble) {
     }
 
     override fun onStatus(status: BLELifecycleState, scanning: Boolean) {
-        if (status==BLELifecycleState.On) {
+        if (status==BLELifecycleState.Connected) {
             highlightDevice(ble.getConnectedDevice()?.id)
         }
     }
