@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.aboni.n2kRouter"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.aboni.N2KRouter"
         minSdk = 34
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
