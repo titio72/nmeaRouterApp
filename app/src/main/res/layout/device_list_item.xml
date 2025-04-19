@@ -15,6 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
+        android:importantForAccessibility="no"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_bt_off" />
@@ -27,17 +28,19 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/rssiText"
         app:layout_constraintStart_toEndOf="@+id/listItemGlyph"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/idText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="address"
-        android:textSize="10sp"
+        android:textSize="11sp"
         app:layout_constraintEnd_toEndOf="@+id/listItemText"
         app:layout_constraintStart_toEndOf="@+id/listItemGlyph"
-        app:layout_constraintTop_toBottomOf="@+id/listItemText" />
+        app:layout_constraintTop_toBottomOf="@+id/listItemText"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/rssiText"
@@ -46,7 +49,8 @@
         android:visibility="gone"
         android:text="rssi"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
     <com.aboni.n2kRouter.SignalStrengthView
         android:id="@+id/rssiIcon"

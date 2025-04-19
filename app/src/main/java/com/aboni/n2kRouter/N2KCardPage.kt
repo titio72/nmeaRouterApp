@@ -5,7 +5,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 
-open class N2KCardPage(context: Context, val ble: BLEThing): ConstraintLayout(context), BLEN2KListener {
+open class N2KCardPage(context: Context, val ble: BLEThing?): ConstraintLayout(context), BLEN2KListener {
+
+    constructor(context: Context): this(context, null)
 
     //region widgets
     private val theContainer: ConstraintLayout
@@ -16,7 +18,7 @@ open class N2KCardPage(context: Context, val ble: BLEThing): ConstraintLayout(co
         get() = findViewById(R.id.cardImg)
     //endregion
 
-    init {
+    protected fun initView() {
         inflate(context, R.layout.card_page, this)
     }
 
@@ -33,7 +35,7 @@ open class N2KCardPage(context: Context, val ble: BLEThing): ConstraintLayout(co
 
     protected fun attachCard(view: Int) {
         inflate(context, view, theContainer)
-        ble.addListener(this)
+        ble?.addListener(this)
         cardImage.setOnClickListener {
             onHeaderImageClicked()
         }

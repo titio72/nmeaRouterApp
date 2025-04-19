@@ -21,7 +21,7 @@ fun formatLatLon(ctx: Context, x: Double, pos: String, neg: String): String {
     val xx = abs(x)
     val deg = xx.toInt()
     val f = (xx - deg) * 60.0
-    return formatValue(ctx, R.string.LATLON_FORMAT, deg, f, p)
+    return formatValue(ctx, R.string.LAT_LON_FORMAT, deg, f, p)
 }
 
 fun formatEngineHours(ctx: Context, seconds: Long): String {

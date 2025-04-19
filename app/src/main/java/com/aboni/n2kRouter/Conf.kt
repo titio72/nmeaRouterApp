@@ -9,8 +9,9 @@ class Conf {
         const val SYT_INDEX_CONF = 3
         const val RPM_INDEX_CONF = 4
         const val STW_INDEX_CONF = 5
+        const val VED_INDEX_CONF = 6
 
-        const val CONF_SIZE = 6
+        const val CONF_SIZE = 7
     }
 
     fun copyFrom(c: Conf) {
@@ -20,6 +21,7 @@ class Conf {
         bDHT = c.bDHT
         bRPM = c.bRPM
         bSTW = c.bSYT
+        bVED = c.bVED
     }
 
     fun copyFrom(v: Int) {
@@ -29,6 +31,7 @@ class Conf {
         bSYT = (v and 0x08) != 0
         bSTW = (v and 0x10) != 0
         bRPM = (v and 0x20) != 0
+        bVED = (v and 0x40) != 0
     }
 
     fun copyFrom(value: ByteArray) {
@@ -39,6 +42,7 @@ class Conf {
             bSTW = value[STW_INDEX_CONF] == '1'.code.toByte()
             bSYT = value[SYT_INDEX_CONF] == '1'.code.toByte()
             bRPM = value[RPM_INDEX_CONF] == '1'.code.toByte()
+            bVED = value[VED_INDEX_CONF] == '1'.code.toByte()
         } else {
             val s = String(value)
             throw RuntimeException("Invalid configuration '$s'")
@@ -53,9 +57,11 @@ class Conf {
         v[SYT_INDEX_CONF] = (if (bSYT) '1' else '0').code.toByte()
         v[STW_INDEX_CONF] = (if (bSTW) '1' else '0').code.toByte()
         v[RPM_INDEX_CONF] = (if (bRPM) '1' else '0').code.toByte()
+        v[VED_INDEX_CONF] = (if (bVED) '1' else '0').code.toByte()
         return v
     }
 
+    var bVED: Boolean = false
     var bGPS: Boolean = false
     var bSYT: Boolean = false
     var bBMP: Boolean = false

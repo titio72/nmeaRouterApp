@@ -3,7 +3,7 @@ package com.aboni.n2kRouter
 import java.time.Instant
 
 fun byteToInt(v: ByteArray, offset: Int, size: Int): Long? {
-    if ((size+offset)>v.size) return null;
+    if ((size+offset)>v.size) return null
     val bytes = v.copyOfRange(offset, offset + size)
     var result = 0L
     var shift = 0
@@ -40,9 +40,9 @@ class Data {
         var valid: Boolean = false
 
         fun parse(data: ByteArray, offset: Int): Int {
-            val vv = byteToInt(data, offset, size);
+            val vv = byteToInt(data, offset, size)
             if (vv==null) {
-                valid = false;
+                valid = false
             } else {
                 value = vv
                 valid = false
@@ -72,7 +72,10 @@ class Data {
     var lon = DoubleValue(4, true, 0.000001)
     var sog = DoubleValue(2, false, 0.01)
     var cog = DoubleValue(2, false, 0.1)
-    var rpm = IntValue(2, false);
+    var soc = DoubleValue(2, false, 1.0)
+    var volts = DoubleValue(2, true, 0.01)
+    var current = DoubleValue(2, true, 0.01)
+    var rpm = IntValue(2, false)
     var canErrors = IntValue(4, false)
     var canSent = IntValue(4, false)
     var heap = IntValue(4, false)
@@ -81,6 +84,7 @@ class Data {
     var utcTime = TimeValue()
     var svc = IntValue(1, false)
     var rpmAdj = DoubleValue(4, false, 0.0001)
+    var n2kSrc = IntValue(1, false)
 
     var canSentPeriod = -1
     var canErrorsPeriod = -1
@@ -88,7 +92,7 @@ class Data {
     var lastCanSent = -1
 
     fun parse(data: ByteArray) {
-        var offset = 0;
+        var offset = 0
         offset = gpsFix.parse(data, offset)
         offset = atmo.parse(data, offset)
         offset = temp.parse(data, offset)
@@ -105,20 +109,25 @@ class Data {
         offset = engineHours.parse(data, offset)
         offset = utcTime.parse(data, offset)
         offset = svc.parse(data, offset)
-        rpmAdj.parse(data, offset)
+        offset = rpmAdj.parse(data, offset)
+        offset = current.parse(data, offset)
+        offset = volts.parse(data, offset)
+        offset = soc.parse(data, offset)
+        n2kSrc.parse(data, offset)
+
 
         if (canSent.valid) {
             if (lastCanSent != -1) {
                 canSentPeriod = canSent.value.toInt() - lastCanSent
             }
-            lastCanSent = canSent.value.toInt();
+            lastCanSent = canSent.value.toInt()
         }
 
         if (canErrors.valid) {
             if (lastCanErrors != -1) {
                 canErrorsPeriod = canErrors.value.toInt() - lastCanErrors
             }
-            lastCanErrors = canErrors.value.toInt();
+            lastCanErrors = canErrors.value.toInt()
         }
     }
 }

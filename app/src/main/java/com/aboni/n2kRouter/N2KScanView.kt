@@ -8,8 +8,9 @@ import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class N2KScanView(context: Context, ble: BLEThing) : N2KCardPage(context, ble) {
+class N2KScanView(context: Context, ble: BLEThing?) : N2KCardPage(context, ble) {
 
+    constructor(context: Context): this(context, null)
     //region widgets
     private val deviceListView: RecyclerView
         get() = findViewById(R.id.deviceList)
@@ -24,7 +25,7 @@ class N2KScanView(context: Context, ble: BLEThing) : N2KCardPage(context, ble) {
         val theView: DeviceListItemView = view as DeviceListItemView
     }
 
-    private class DeviceListCustomAdapter(private val dataSet: List<DeviceItem>, private val listener: OnDeviceClickedListener, private val ble: BLEThing): RecyclerView.Adapter<DeviceItemViewHolder>() {
+    private class DeviceListCustomAdapter(private val dataSet: List<DeviceItem>, private val listener: OnDeviceClickedListener, private val ble: BLEThing?): RecyclerView.Adapter<DeviceItemViewHolder>() {
 
         override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): DeviceItemViewHolder {
             val view = DeviceListItemView(viewGroup.context)
@@ -39,12 +40,15 @@ class N2KScanView(context: Context, ble: BLEThing) : N2KCardPage(context, ble) {
 
         override fun onBindViewHolder(viewHolder: DeviceItemViewHolder, position: Int) {
             viewHolder.theView.deviceItem = dataSet[position]
-            viewHolder.theView.highlighted = if (ble.getConnectedDevice()!=null) dataSet[position].idMatch(ble.getConnectedDevice()!!) else false
+            if (ble!=null)
+                viewHolder.theView.highlighted = if (ble.getConnectedDevice()!=null) dataSet[position].idMatch(ble.getConnectedDevice()!!) else false
+            else
+                viewHolder.theView.highlighted = false
             viewHolder.theView.setOnClickListener { v ->
                 run {
                     listener.onDeviceClicked(v as DeviceListItemView)
                 }
-            };
+            }
         }
 
         override fun onViewRecycled(holder: DeviceItemViewHolder) {
@@ -64,6 +68,7 @@ class N2KScanView(context: Context, ble: BLEThing) : N2KCardPage(context, ble) {
     //endregion
 
     init {
+        initView()
         attachCard(R.layout.scan_view)
         setTitleResource(R.string.scan_card_title)
         setImageResource(android.R.drawable.ic_menu_search)
@@ -73,11 +78,11 @@ class N2KScanView(context: Context, ble: BLEThing) : N2KCardPage(context, ble) {
    }
 
     override fun onActivate() {
-        highlightDevice(ble.getConnectedDevice()?.id)
+        highlightDevice(ble?.getConnectedDevice()?.id)
     }
 
     override fun onHeaderImageClicked() {
-        ble.startScan()
+        ble?.startScan()
         resetDevices()
     }
 
@@ -111,7 +116,7 @@ class N2KScanView(context: Context, ble: BLEThing) : N2KCardPage(context, ble) {
 
     override fun onStatus(status: BLELifecycleState, scanning: Boolean) {
         if (status==BLELifecycleState.Connected) {
-            highlightDevice(ble.getConnectedDevice()?.id)
+            highlightDevice(ble?.getConnectedDevice()?.id)
         }
     }
 
@@ -124,6 +129,6 @@ class N2KScanView(context: Context, ble: BLEThing) : N2KCardPage(context, ble) {
 
     private fun setDevice(d: DeviceListItemView) {
         highlightDevice(d.deviceItem.id)
-        ble.setDeviceToConnect(d.deviceItem.id)
+        ble?.setDeviceToConnect(d.deviceItem.id)
     }
 }

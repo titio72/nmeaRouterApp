@@ -2,28 +2,30 @@ package com.aboni.n2kRouter
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.text.Editable
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import com.google.android.material.switchmaterial.SwitchMaterial
+import androidx.core.graphics.toColorInt
 
-class N2KSettingsView(context: Context, ble: BLEThing) : N2KCardPage(context, ble) {
+class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, ble) {
+
+    constructor(context: Context): this(context, null)
 
     //region widgets
-    private val buttonSave: Button
+    private val buttonSave: ImageButton
         get() = findViewById(R.id.buttonSave)
-    private val buttonSaveRPMCalibration: Button
+    private val buttonSaveRPMCalibration: ImageButton
         get() = findViewById(R.id.buttonSaveRPMCalibration)
-    private val buttonSaveDeviceName: Button
+    private val buttonSaveDeviceName: ImageButton
         get() = findViewById(R.id.buttonSaveDeviceName)
-    private val buttonSaveEngineHours: Button
+    private val buttonSaveEngineHours: ImageButton
         get() = findViewById(R.id.buttonSaveEngineHours)
-    private val buttonSaveRPMAdjustment: Button
+    private val buttonSaveRPMAdjustment: ImageButton
         get() = findViewById(R.id.buttonSaveRPMAdjustment)
     private val switchGPS: SwitchMaterial
         get() = findViewById(R.id.checkBoxEnableGPS)
@@ -33,6 +35,8 @@ class N2KSettingsView(context: Context, ble: BLEThing) : N2KCardPage(context, bl
         get() = findViewById(R.id.checkBoxEnableDHT)
     private val switchSTW: SwitchMaterial
         get() = findViewById(R.id.checkBoxEnableSTW)
+    private val switchVED: SwitchMaterial
+        get() = findViewById(R.id.checkBoxEnableVED)
     private val switchSYT: SwitchMaterial
         get() = findViewById(R.id.checkBoxEnableSysTime)
     private val switchRPM: SwitchMaterial
@@ -51,6 +55,8 @@ class N2KSettingsView(context: Context, ble: BLEThing) : N2KCardPage(context, bl
         get() = findViewById(R.id.txtRpm_Settings)
     private val rpmAdjTxtView: TextView
         get() = findViewById(R.id.txtRpmAdj_Settings)
+    private val deviceNameTxtView: TextView
+        get() = findViewById(R.id.txtDeviceName_Settings)
     //endregion
 
     private var switchTintList: ColorStateList? = null
@@ -61,13 +67,14 @@ class N2KSettingsView(context: Context, ble: BLEThing) : N2KCardPage(context, bl
         ),
         intArrayOf(
             // Color when the switch is checked
-            Color.parseColor("#FF0000"),
+            "#FF0000".toColorInt(),
             // Color when the switch is unchecked
-            Color.parseColor("#AA0000")
+            "#AA0000".toColorInt()
         )
     )
 
     init {
+        initView()
         attachCard(R.layout.settings_view)
         setTitleResource(R.string.settings_card_title)
         setImageResource(android.R.drawable.ic_menu_edit)
@@ -93,9 +100,11 @@ class N2KSettingsView(context: Context, ble: BLEThing) : N2KCardPage(context, bl
         post {
             enableButtons(status == BLELifecycleState.Connected)
             if (status == BLELifecycleState.Connected) {
-                editDeviceName.text = ble.getConnectedDevice()?.name?.toEditable() ?: "".toEditable()
+                editDeviceName.text = ble?.getConnectedDevice()?.name?.toEditable() ?: "".toEditable()
+                deviceNameTxtView.text = ble?.getConnectedDevice()?.name?.toEditable() ?: "".toEditable()
             } else {
                 editDeviceName.text = "".toEditable()
+                deviceNameTxtView.text = "".toEditable()
             }
         }
     }
@@ -117,6 +126,8 @@ class N2KSettingsView(context: Context, ble: BLEThing) : N2KCardPage(context, bl
                     if (switchSYT.isChecked == c.bSYT) switchTintList else switchTintListDirty
                 switchRPM.trackTintList =
                     if (switchRPM.isChecked == c.bRPM) switchTintList else switchTintListDirty
+                switchVED.trackTintList =
+                    if (switchVED.isChecked == c.bVED) switchTintList else switchTintListDirty
             }
             val noValue = noValueStr(context)
             rpmTxtView.text = if (data.rpm.valid) formatValue(
@@ -152,6 +163,7 @@ class N2KSettingsView(context: Context, ble: BLEThing) : N2KCardPage(context, bl
             conf.bRPM = switchRPM.isChecked
             conf.bSTW = switchSTW.isChecked
             conf.bSYT = switchSYT.isChecked
+            conf.bVED = switchVED.isChecked
         } else {
             switchBMP.isChecked = conf.bBMP
             switchDHT.isChecked = conf.bDHT
@@ -159,6 +171,7 @@ class N2KSettingsView(context: Context, ble: BLEThing) : N2KCardPage(context, bl
             switchGPS.isChecked = conf.bGPS
             switchRPM.isChecked = conf.bRPM
             switchSTW.isChecked = conf.bSTW
+            switchVED.isChecked = conf.bVED
         }
     }
 
@@ -166,13 +179,13 @@ class N2KSettingsView(context: Context, ble: BLEThing) : N2KCardPage(context, bl
         if (v.id == R.id.buttonSave) {
             val c = Conf()
             syncConfSwitch(c, true)
-            ble.saveConfiguration(c)
+            ble?.saveConfiguration(c)
         }
     }
 
     private fun onSaveDeviceNameClick() {
         val n = editDeviceName.text
-        ble.saveDeviceName(n.toString())
+        ble?.saveDeviceName(n.toString())
     }
 
     private fun onSaveEngineHoursClick() {
@@ -180,7 +193,7 @@ class N2KSettingsView(context: Context, ble: BLEThing) : N2KCardPage(context, bl
         val t = n.split(":")
         if (t.size!=2) return
         try {
-            ble.saveEngineHours(t[0].toInt(), t[1].toInt())
+            ble?.saveEngineHours(t[0].toInt(), t[1].toInt())
         } catch (e: Exception) {
             Toast.makeText(context, "Error reading engine hours $n", LENGTH_LONG).show()
         }
@@ -188,13 +201,13 @@ class N2KSettingsView(context: Context, ble: BLEThing) : N2KCardPage(context, bl
 
     private fun onSaveRPMCalibration() {
         val n = editRPMCalibration.text
-        ble.saveRPMCalibration(n.toString().toInt())
+        ble?.saveRPMCalibration(n.toString().toInt())
     }
 
     private fun onSaveRPMAdjustment() {
         try {
             val d = editRPMAdjustment.text.toString().toDouble()
-            ble.saveRPMAdjustment(d)
+            ble?.saveRPMAdjustment(d)
         } catch (e: Exception) {
             // do nothing
         }

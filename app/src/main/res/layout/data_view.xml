@@ -11,7 +11,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
@@ -19,7 +18,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txtGPSFix"
-        app:layout_constraintTop_toBottomOf="@+id/txtLon"
+        app:layout_constraintTop_toTopOf="@+id/txtGPSFix"
         tools:text="0000-00-00T00:00:00Z" />
 
     <TextView
@@ -27,7 +26,7 @@
         android:layout_width="88dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
@@ -64,31 +63,31 @@
 
     <TextView
         android:id="@+id/txtHeap"
-        android:layout_width="104dp"
+        android:layout_width="64dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTime"
-        tools:text="000,000" />
+        app:layout_constraintTop_toBottomOf="@+id/divider3"
+        tools:text="000" />
 
     <TextView
         android:id="@+id/txtRPM"
         android:layout_width="104dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAtmo"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
         tools:text="0000" />
 
     <TextView
@@ -106,29 +105,42 @@
 
     <TextView
         android:id="@+id/txtCan"
-        android:layout_width="168dp"
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/txtCanSrc"
+        app:layout_constraintStart_toEndOf="@+id/txtHeap"
+        app:layout_constraintTop_toTopOf="@+id/txtHeap"
+        tools:text="000/000" />
+
+    <TextView
+        android:id="@+id/txtCanSrc"
+        android:layout_width="88dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txtHeap"
-        tools:text="000(000)" />
+        tools:text="000/Ok " />
 
     <TextView
         android:id="@+id/txtLat"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtRPM"
+        app:layout_constraintTop_toBottomOf="@+id/divider4"
         tools:text="000,000000" />
 
     <TextView
@@ -233,9 +245,17 @@
         android:id="@+id/lblCan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/data_canbus_label"
+        android:text="@string/data_n2k_msg_label"
         app:layout_constraintBottom_toTopOf="@+id/txtCan"
         app:layout_constraintEnd_toEndOf="@id/txtCan" />
+
+    <TextView
+        android:id="@+id/lblCanSrc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_n2k_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtCanSrc"
+        app:layout_constraintEnd_toEndOf="@id/txtCanSrc" />
 
     <TextView
         android:id="@+id/lblLat"
@@ -274,7 +294,7 @@
         android:layout_width="32dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="40dp"
         android:text="@string/NO_VALUE_STRING"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -285,8 +305,118 @@
         android:id="@+id/lblGPSFix"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Fix"
+        android:text="@string/data_gps_fix_label"
         app:layout_constraintBottom_toTopOf="@+id/txtGPSFix"
         app:layout_constraintStart_toStartOf="@+id/txtGPSFix" />
+
+    <TextView
+        android:id="@+id/txtVoltage"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/NO_VALUE_STRING"
+        android:textAlignment="viewEnd"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        tools:text="00.00" />
+
+    <TextView
+        android:id="@+id/lblVoltage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_voltage_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtVoltage"
+        app:layout_constraintEnd_toEndOf="@+id/txtVoltage" />
+
+    <TextView
+        android:id="@+id/txtCurrent"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="@string/NO_VALUE_STRING"
+        android:textAlignment="viewEnd"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/txtSOC"
+        app:layout_constraintStart_toEndOf="@+id/txtVoltage"
+        app:layout_constraintTop_toTopOf="@+id/txtVoltage"
+        tools:text="000.00" />
+
+    <TextView
+        android:id="@+id/lblCurrent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_current_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtCurrent"
+        app:layout_constraintEnd_toEndOf="@+id/txtCurrent" />
+
+    <TextView
+        android:id="@+id/txtSOC"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="@string/NO_VALUE_STRING"
+        android:textAlignment="viewEnd"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtCurrent"
+        tools:text="000.00" />
+
+    <TextView
+        android:id="@+id/lblSOC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_soc_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtSOC"
+        app:layout_constraintEnd_toEndOf="@+id/txtSOC" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtAtmo" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtRPM" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtVoltage" />
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtHeap" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

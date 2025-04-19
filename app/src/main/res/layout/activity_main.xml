@@ -60,6 +60,7 @@
                 android:id="@+id/imageLogo"
                 android:layout_width="149dp"
                 android:layout_height="105dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/itaca_v3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -69,8 +70,8 @@
                 android:layout_width="96dp"
                 android:layout_height="32dp"
                 android:fontFamily="monospace"
-                android:gravity="left|center_vertical"
-                android:text="-"
+                android:gravity="start|center_vertical"
+                android:text="@string/NO_VALUE_STRING"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@+id/imgConnection"
                 app:layout_constraintTop_toTopOf="@+id/imgConnection" />
@@ -80,6 +81,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="8dp"
+                android:importantForAccessibility="no"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_scanning_off" />
