@@ -29,8 +29,8 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
         get() = findViewById(R.id.buttonSaveRPMAdjustment)
     private val switchGPS: SwitchMaterial
         get() = findViewById(R.id.checkBoxEnableGPS)
-    private val switchBMP: SwitchMaterial
-        get() = findViewById(R.id.checkBoxEnableBMP)
+    private val switchBME: SwitchMaterial
+        get() = findViewById(R.id.checkBoxEnableBME)
     private val switchDHT: SwitchMaterial
         get() = findViewById(R.id.checkBoxEnableDHT)
     private val switchSTW: SwitchMaterial
@@ -116,8 +116,8 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
                 c.copyFrom(data.svc.value.toInt())
                 switchGPS.trackTintList =
                     if (switchGPS.isChecked == c.bGPS) switchTintList else switchTintListDirty
-                switchBMP.trackTintList =
-                    if (switchBMP.isChecked == c.bBMP) switchTintList else switchTintListDirty
+                switchBME.trackTintList =
+                    if (switchBME.isChecked == c.bBME) switchTintList else switchTintListDirty
                 switchDHT.trackTintList =
                     if (switchDHT.isChecked == c.bDHT) switchTintList else switchTintListDirty
                 switchSTW.trackTintList =
@@ -157,7 +157,7 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
 
     private fun syncConfSwitch(conf: Conf, writeConf: Boolean) {
         if (writeConf) {
-            conf.bBMP = switchBMP.isChecked
+            conf.bBME = switchBME.isChecked
             conf.bDHT = switchDHT.isChecked
             conf.bGPS = switchGPS.isChecked
             conf.bRPM = switchRPM.isChecked
@@ -165,7 +165,7 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
             conf.bSYT = switchSYT.isChecked
             conf.bVED = switchVED.isChecked
         } else {
-            switchBMP.isChecked = conf.bBMP
+            switchBME.isChecked = conf.bBME
             switchDHT.isChecked = conf.bDHT
             switchSYT.isChecked = conf.bSYT
             switchGPS.isChecked = conf.bGPS

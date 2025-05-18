@@ -39,7 +39,7 @@
     <string name="data_rpm_label">RPM</string>
     <string name="data_heap_label">Heap (KB)</string>
     <string name="data_temperature_label">Temp. (°C)</string>
-    <string name="data_atmo_pressure_label">Atmo (MB)</string>
+    <string name="data_atmo_pressure_label">Atmo (mbar)</string>
     <string name="data_humidity_label">Humidity (%)</string>
     <string name="data_time_utc_label">UTC</string>
     <string name="txt_na">-</string>
@@ -57,4 +57,5 @@
     <string name="button_calibrate_rpm_adjustment">Calibrate RPM adjustment</string>
     <string name="buton_save_engine_hours">Save engine hours (hhhh:mm)</string>
     <string name="button_set_device_name">Set bluetooth device name</string>
+    <string name="bme_switch">BME</string>
 </resources>

@@ -345,11 +345,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/checkBoxEnableGPS" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/checkBoxEnableBMP"
+                android:id="@+id/checkBoxEnableBME"
                 android:layout_width="80dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="8dp"
-                android:text="@string/bmp_switch"
+                android:text="@string/bme_switch"
                 android:textAlignment="viewStart"
                 app:layout_constraintStart_toEndOf="@+id/checkBoxEnableDHT"
                 app:layout_constraintTop_toTopOf="@+id/checkBoxEnableDHT" />
