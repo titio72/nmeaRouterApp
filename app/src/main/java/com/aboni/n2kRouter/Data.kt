@@ -7,12 +7,17 @@ fun byteToInt(v: ByteArray, offset: Int, size: Int): Long? {
     val bytes = v.copyOfRange(offset, offset + size)
     var result = 0L
     var shift = 0
+    val negative = bytes[bytes.size-1] < 0
     for (byte in bytes) {
-        val ub: UByte = byte.toUByte()
+        var ub: UByte = byte.toUByte()
+        if (negative) ub = ub.inv()
         result = result or ((ub.toInt() shl shift).toLong())
         shift += 8
     }
-    return result
+    return if (negative)
+        -(result+1)
+    else
+        result
 }
 
 class Data {
@@ -72,7 +77,7 @@ class Data {
     var lon = DoubleValue(4, true, 0.000001)
     var sog = DoubleValue(2, true, 0.01)
     var cog = DoubleValue(2, true, 0.1)
-    var soc = DoubleValue(2, false, 1.0)
+    var soc = DoubleValue(2, true, 1.0)
     var volts = DoubleValue(2, true, 0.01)
     var current = DoubleValue(2, true, 0.01)
     var rpm = IntValue(2, false)
