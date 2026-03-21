@@ -305,7 +305,7 @@
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableGPS"
-                android:layout_width="80dp"
+                android:layout_width="92dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
@@ -316,7 +316,7 @@
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableSysTime"
-                android:layout_width="80dp"
+                android:layout_width="92dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="8dp"
                 android:text="@string/time_switch"
@@ -326,7 +326,7 @@
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableSTW"
-                android:layout_width="80dp"
+                android:layout_width="92dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="8dp"
                 android:text="@string/stw_switch"
@@ -336,7 +336,7 @@
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableDHT"
-                android:layout_width="80dp"
+                android:layout_width="92dp"
                 android:layout_height="36dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/dht_switch"
@@ -346,7 +346,7 @@
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableBME"
-                android:layout_width="80dp"
+                android:layout_width="92dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="8dp"
                 android:text="@string/bme_switch"
@@ -356,7 +356,7 @@
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableRPM"
-                android:layout_width="80dp"
+                android:layout_width="92dp"
                 android:layout_height="36dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/rpm_switch"
@@ -367,7 +367,7 @@
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableVED"
-                android:layout_width="80dp"
+                android:layout_width="92dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="8dp"
                 android:text="@string/ved_switch"
@@ -375,6 +375,39 @@
                 android:visibility="visible"
                 app:layout_constraintStart_toEndOf="@+id/checkBoxEnableRPM"
                 app:layout_constraintTop_toTopOf="@+id/checkBoxEnableRPM" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/checkBoxKeepN2KSrc"
+                android:layout_width="92dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:text="@string/keep_n2k_switch"
+                android:textAlignment="viewStart"
+                android:visibility="visible"
+                app:layout_constraintStart_toEndOf="@+id/checkBoxEnableBME"
+                app:layout_constraintTop_toTopOf="@+id/checkBoxEnableBME" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/checkBoxEnableSTWPaddle"
+                android:layout_width="92dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/stw_paddle_switch"
+                android:textAlignment="viewStart"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="@+id/checkBoxEnableRPM"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxEnableRPM" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/checkBoxEnableWaterTemp"
+                android:layout_width="92dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:text="@string/water_temp_switch"
+                android:textAlignment="viewStart"
+                android:visibility="visible"
+                app:layout_constraintStart_toEndOf="@+id/checkBoxEnableSTWPaddle"
+                app:layout_constraintTop_toTopOf="@+id/checkBoxEnableSTWPaddle" />
 
             <ImageButton
                 android:id="@+id/buttonSave"
@@ -384,7 +417,7 @@
                 android:background="@drawable/round_button"
                 android:contentDescription="@string/button_save_services"
                 android:src="@android:drawable/ic_menu_save"
-                app:layout_constraintBottom_toBottomOf="@+id/checkBoxEnableVED"
+                app:layout_constraintBottom_toBottomOf="@+id/checkBoxEnableWaterTemp"
                 app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

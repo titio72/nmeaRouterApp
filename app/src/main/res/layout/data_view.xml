@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
@@ -25,12 +25,12 @@
         android:id="@+id/txtAtmo"
         android:layout_width="88dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="0000.0" />
@@ -39,34 +39,47 @@
         android:id="@+id/txtHum"
         android:layout_width="72dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblTemp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/txtRPM"
+        app:layout_constraintStart_toEndOf="@+id/txtAtmo"
+        app:layout_constraintTop_toBottomOf="@+id/lblAtmo"
         tools:text="00.0" />
 
     <TextView
         android:id="@+id/txtTemp"
         android:layout_width="64dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/txtHum"
-        app:layout_constraintStart_toEndOf="@+id/txtAtmo"
-        app:layout_constraintTop_toBottomOf="@+id/lblAtmo"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtAtmo"
+        tools:text="00.0" />
+
+    <TextView
+        android:id="@+id/txtSeaTemp"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/txtHum"
+        app:layout_constraintTop_toTopOf="@+id/txtTemp"
         tools:text="00.0" />
 
     <TextView
         android:id="@+id/txtHeap"
         android:layout_width="64dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
@@ -80,27 +93,26 @@
         android:id="@+id/txtRPM"
         android:layout_width="104dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblHum"
         tools:text="0000" />
 
     <TextView
         android:id="@+id/txtEngineH"
         android:layout_width="128dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="24dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtRPM"
+        app:layout_constraintTop_toBottomOf="@+id/lblSeaTemp"
         tools:text="00000:00" />
 
     <TextView
@@ -120,7 +132,7 @@
         android:id="@+id/txtCanSrc"
         android:layout_width="88dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
@@ -133,8 +145,8 @@
         android:id="@+id/txtLat"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
@@ -147,41 +159,54 @@
         android:id="@+id/txtLon"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtLat"
+        app:layout_constraintTop_toTopOf="@+id/txtCog"
         tools:text="000,000000" />
 
     <TextView
         android:id="@+id/txtSog"
-        android:layout_width="80dp"
+        android:layout_width="64dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txtLat"
-        tools:text="00.0" />
+        tools:text="00.00" />
 
     <TextView
-        android:id="@+id/txtCog"
-        android:layout_width="72dp"
+        android:id="@+id/txtStw"
+        android:layout_width="64dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="monospace"
         android:text="@string/txt_na"
         android:textAlignment="viewEnd"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtSog"
+        tools:text="00.00" />
+
+    <TextView
+        android:id="@+id/txtCog"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="monospace"
+        android:text="@string/txt_na"
+        android:textAlignment="viewEnd"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtStw"
         tools:text="000.0" />
 
     <TextView
@@ -200,13 +225,21 @@
         app:layout_constraintBottom_toTopOf="@+id/txtAtmo"
         app:layout_constraintEnd_toEndOf="@+id/txtAtmo" />
 
-        <TextView
+    <TextView
         android:id="@+id/lblTemp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/data_temperature_label"
         app:layout_constraintBottom_toTopOf="@+id/txtTemp"
         app:layout_constraintEnd_toEndOf="@+id/txtTemp" />
+
+    <TextView
+        android:id="@+id/lblSeaTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_sea_temp_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtSeaTemp"
+        app:layout_constraintEnd_toEndOf="@+id/txtSeaTemp" />
 
     <TextView
         android:id="@+id/lblHum"
@@ -282,6 +315,14 @@
         app:layout_constraintEnd_toEndOf="@+id/txtSog" />
 
     <TextView
+        android:id="@+id/lblStw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data_stw_label"
+        app:layout_constraintBottom_toTopOf="@+id/txtStw"
+        app:layout_constraintEnd_toEndOf="@+id/txtStw" />
+
+    <TextView
         android:id="@+id/lblCOG"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -293,8 +334,8 @@
         android:id="@+id/txtGPSFix"
         android:layout_width="32dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
         android:text="@string/NO_VALUE_STRING"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -313,8 +354,8 @@
         android:id="@+id/txtVoltage"
         android:layout_width="72dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
         android:text="@string/NO_VALUE_STRING"
         android:textAlignment="viewEnd"
         android:textSize="20sp"
@@ -355,7 +396,7 @@
         android:id="@+id/txtSOC"
         android:layout_width="72dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/NO_VALUE_STRING"
         android:textAlignment="viewEnd"
         android:textSize="20sp"
@@ -372,35 +413,23 @@
         app:layout_constraintEnd_toEndOf="@+id/txtSOC" />
 
     <View
-        android:id="@+id/divider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAtmo" />
-
-    <View
         android:id="@+id/divider2"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtRPM" />
+        app:layout_constraintTop_toBottomOf="@+id/txtSeaTemp" />
 
     <View
         android:id="@+id/divider3"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
@@ -412,11 +441,21 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtHeap" />
+
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="1dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="16dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toTopOf="@+id/lblCurrent"
+        app:layout_constraintStart_toEndOf="@+id/txtSeaTemp"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

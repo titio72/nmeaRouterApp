@@ -41,6 +41,12 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
         get() = findViewById(R.id.checkBoxEnableSysTime)
     private val switchRPM: SwitchMaterial
         get() = findViewById(R.id.checkBoxEnableRPM)
+    private val switchKeepN2KSrc: SwitchMaterial
+        get() = findViewById(R.id.checkBoxKeepN2KSrc)
+    private val switchSTWPaddle: SwitchMaterial
+        get() = findViewById(R.id.checkBoxEnableSTWPaddle)
+    private val switchWaterTemp: SwitchMaterial
+        get() = findViewById(R.id.checkBoxEnableWaterTemp)
     private val editDeviceName: EditText
         get() = findViewById(R.id.editDeviceName)
     private val editEngineHours: EditText
@@ -57,6 +63,7 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
         get() = findViewById(R.id.txtRpmAdj_Settings)
     private val deviceNameTxtView: TextView
         get() = findViewById(R.id.txtDeviceName_Settings)
+
     //endregion
 
     private var switchTintList: ColorStateList? = null
@@ -111,9 +118,10 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
 
     override fun onData(data: Data) {
         post {
-            if (data.svc.valid) {
+            val svc = data.getServices()
+            if (svc.valid) {
                 val c = Conf()
-                c.copyFrom(data.svc.value.toInt())
+                c.copyFrom(svc.value.toInt())
                 switchGPS.trackTintList =
                     if (switchGPS.isChecked == c.bGPS) switchTintList else switchTintListDirty
                 switchBME.trackTintList =
@@ -128,6 +136,13 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
                     if (switchRPM.isChecked == c.bRPM) switchTintList else switchTintListDirty
                 switchVED.trackTintList =
                     if (switchVED.isChecked == c.bVED) switchTintList else switchTintListDirty
+                switchKeepN2KSrc.trackTintList =
+                    if (switchKeepN2KSrc.isChecked == c.bSRC) switchTintList else switchTintListDirty
+                switchSTWPaddle.trackTintList =
+                    if (switchSTWPaddle.isChecked == c.bSTW_PADDLE) switchTintList else switchTintListDirty
+                switchWaterTemp.trackTintList =
+                    if (switchWaterTemp.isChecked == c.bSEA_TEMP) switchTintList else switchTintListDirty
+
             }
             val noValue = noValueStr(context)
             rpmTxtView.text = if (data.rpm.valid) formatValue(
@@ -164,6 +179,9 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
             conf.bSTW = switchSTW.isChecked
             conf.bSYT = switchSYT.isChecked
             conf.bVED = switchVED.isChecked
+            conf.bSRC = switchKeepN2KSrc.isChecked
+            conf.bSTW_PADDLE = switchSTWPaddle.isChecked
+            conf.bSEA_TEMP = switchWaterTemp.isChecked
         } else {
             switchBME.isChecked = conf.bBME
             switchDHT.isChecked = conf.bDHT
@@ -172,6 +190,9 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
             switchRPM.isChecked = conf.bRPM
             switchSTW.isChecked = conf.bSTW
             switchVED.isChecked = conf.bVED
+            switchKeepN2KSrc.isChecked = conf.bSRC
+            switchSTWPaddle.isChecked = conf.bSTW_PADDLE
+            switchWaterTemp.isChecked = conf.bSEA_TEMP
         }
     }
 

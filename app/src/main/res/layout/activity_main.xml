@@ -58,8 +58,8 @@
 
             <ImageView
                 android:id="@+id/imageLogo"
-                android:layout_width="149dp"
-                android:layout_height="105dp"
+                android:layout_width="119dp"
+                android:layout_height="84dp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/itaca_v3"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -9,7 +9,7 @@
     <string name="RPM_FORMAT">%d</string>
     <string name="VOLTS_FORMAT">%.02f</string>
     <string name="AMPERE_FORMAT">%.02f</string>
-    <string name="SOC_FORMAT">%.01f</string>
+    <string name="SPEED_FORMAT">%.01f</string>
     <string name="ENGINE_HOURS_FORMAT">%d:%02d</string>
     <string name="NO_VALUE_STRING">-</string>
     <string name="N2K_STATS_FORMAT">%,d/%,d</string>
@@ -23,14 +23,15 @@
     <string name="gps_switch">GPS</string>
     <string name="dht_switch">DHT</string>
     <string name="bmp_switch">BMP</string>
-    <string name="stw_switch">STW</string>
-    <string name="time_switch">Time</string>
+    <string name="stw_switch">SOG STW</string>
+    <string name="time_switch">GPS Time</string>
     <string name="rpm_switch">RPM</string>
     <string name="rpm_calibration_edit_label">RPM Calibration</string>
     <string name="settings_card_title">Settings</string>
     <string name="data_card_title">Data</string>
     <string name="data_cog_label">COG</string>
     <string name="data_sog_label">SOG (Kn)</string>
+    <string name="data_stw_label">STW (Kn)</string>
     <string name="data_longitude_label">Longitude</string>
     <string name="data_latitude_label">Latitude</string>
     <string name="data_n2k_label">N2K Src</string>
@@ -58,4 +59,8 @@
     <string name="buton_save_engine_hours">Save engine hours (hhhh:mm)</string>
     <string name="button_set_device_name">Set bluetooth device name</string>
     <string name="bme_switch">BME</string>
+    <string name="keep_n2k_switch">Keep N2K</string>
+    <string name="stw_paddle_switch">STW Paddle</string>
+    <string name="water_temp_switch">Water Temp</string>
+    <string name="data_sea_temp_label">Sea (°C)</string>
 </resources>

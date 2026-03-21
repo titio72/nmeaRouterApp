@@ -102,7 +102,7 @@ class MainActivity : BLEN2KListener, BLEApp() {
 
         timer.schedule(object: TimerTask() {
             override fun run() {
-                ble.refreshConnection()
+                ble.sendHeartbeat()
             }
         }, 0, 2500)
 

@@ -48,9 +48,12 @@ interface BLEThing {
     fun getConnectedDevice(): DeviceItem?
     fun addListener(listener: BLEN2KListener)
     fun refreshConnection()
+    fun sendHeartbeat()
 }
 
 class BLEThingImpl(private val context: Context): BLEThing {
+
+    var hostVersion: Int = 0
 
     override val conf = Conf()
     override val data = Data()
@@ -64,7 +67,6 @@ class BLEThingImpl(private val context: Context): BLEThing {
     private var characteristicConf: BluetoothGattCharacteristic? = null
     private var characteristicData: BluetoothGattCharacteristic? = null
     private var characteristicCommand: BluetoothGattCharacteristic? = null
-
 
     private val bluetoothManager: BluetoothManager by lazy {
         context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -91,7 +93,6 @@ class BLEThingImpl(private val context: Context): BLEThing {
         listeners.remove(listener)
         listeners.add(listener)
     }
-
 
     // region save configuration commands
     @SuppressLint("MissingPermission")
@@ -140,10 +141,22 @@ class BLEThingImpl(private val context: Context): BLEThing {
     @SuppressLint("MissingPermission")
     override fun saveRPMAdjustment(value: Double) {
         characteristicCommand?.let {
-            val iValue = (value * 10000).toInt()
+            val scale = 100
+            val iValue = (value * scale).toInt()
             connectedGatt?.writeCharacteristic(
                 characteristicCommand!!,
                 ("t$iValue").toByteArray(Charsets.UTF_8),
+                BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+            )
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun sendHeartbeat() {
+        characteristicCommand?.let {
+            connectedGatt?.writeCharacteristic(
+                characteristicCommand!!,
+                ("h").toByteArray(Charsets.UTF_8),
                 BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
             )
         }
@@ -166,6 +179,7 @@ class BLEThingImpl(private val context: Context): BLEThing {
             connect()
         }
     }
+
 
     override fun setDeviceToConnect(address: String) {
         deviceToConnectTo = address
@@ -353,9 +367,10 @@ class BLEThingImpl(private val context: Context): BLEThing {
                 conf.copyFrom(value)
                 for (l in listeners) l.onConf(conf)
                 if (readIndex==0) {
-                    read(1, gatt)
+                    read(readIndex + 1, gatt)
                 }
             } else if (c.uuid.equals(CHARACTERISTIC_DATA_UUID)) {
+                hostVersion = value[0].toInt()
                 data.parse(value)
                 for (l in listeners) l.onData(data)
             }

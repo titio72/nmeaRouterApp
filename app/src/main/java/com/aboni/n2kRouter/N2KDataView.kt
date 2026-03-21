@@ -42,6 +42,10 @@ class N2KDataView(context: Context, ble: BLEThing?) : N2KCardPage(context, ble) 
         get() = findViewById(R.id.txtVoltage)
     private val socTxtView: TextView
         get() = findViewById(R.id.txtSOC)
+    private val stwTxtView: TextView
+        get() = findViewById(R.id.txtStw)
+    private val seaTeampTxt: TextView
+        get() = findViewById(R.id.txtSeaTemp)
     //endregion
 
     init {
@@ -77,6 +81,8 @@ class N2KDataView(context: Context, ble: BLEThing?) : N2KCardPage(context, ble) 
         fixTxtView.text = if (data.gpsFix.valid) formatGPSFix(context, data.gpsFix.value) else noValue
         voltageTxtView.text = if (data.volts.valid) formatValue(context, R.string.VOLTS_FORMAT, data.volts.value) else noValue
         currentTxtView.text = if (data.current.valid) formatValue(context, R.string.AMPERE_FORMAT, data.current.value) else noValue
-        socTxtView.text = if (data.soc.valid) formatValue(context, R.string.SOC_FORMAT, data.soc.value) else noValue
+        socTxtView.text = if (data.soc.valid) formatValue(context, R.string.SPEED_FORMAT, data.soc.value) else noValue
+        stwTxtView.text = if (data.stwPaddle.valid) formatValue(context, R.string.SPEED_FORMAT, data.stwPaddle.value) else noValue
+        seaTeampTxt.text = if (data.seaTemp.valid) formatValue(context, R.string.TEMPERATURE_FORMAT, data.seaTemp.value) else noValue
     }
 }

@@ -10,7 +10,10 @@ class Conf {
         const val RPM_INDEX_CONF = 4
         const val STW_INDEX_CONF = 5
         const val VED_INDEX_CONF = 6
-        const val CONF_SIZE = 7
+        const val KEEP_N2K_SRC_INDEX_CONF = 7
+        const val SEA_TEMP_INDEX_CONF = 8
+        const val STW_PADDLE_INDEX_CONF = 9
+        const val CONF_SIZE = 10
     }
 
     fun copyFrom(c: Conf) {
@@ -21,31 +24,38 @@ class Conf {
         bRPM = c.bRPM
         bSTW = c.bSYT
         bVED = c.bVED
+        bSRC = c.bSRC
     }
 
     fun copyFrom(v: Int) {
-        bGPS = (v and 0x01) != 0
-        bBME = (v and 0x02) != 0
-        bDHT = (v and 0x04) != 0
-        bSYT = (v and 0x08) != 0
-        bSTW = (v and 0x10) != 0
-        bRPM = (v and 0x20) != 0
-        bVED = (v and 0x40) != 0
+        bGPS = (v and 0x0001) != 0
+        bDHT = (v and 0x0002) != 0
+        bBME = (v and 0x0004) != 0
+        bSYT = (v and 0x0008) != 0
+        bRPM = (v and 0x0010) != 0
+        bSTW = (v and 0x0020) != 0
+        bVED = (v and 0x0040) != 0
+        bSRC = (v and 0x0080) != 0
+        bSEA_TEMP = (v and 0x0100) != 0
+        bSTW_PADDLE = (v and 0x0200) != 0;
     }
 
     fun copyFrom(value: ByteArray) {
-        if (value.size == CONF_SIZE) {
-            bGPS = value[GPS_INDEX_CONF] == '1'.code.toByte()
-            bDHT = value[DHT_INDEX_CONF] == '1'.code.toByte()
-            bBME = value[BME_INDEX_CONF] == '1'.code.toByte()
-            bSTW = value[STW_INDEX_CONF] == '1'.code.toByte()
-            bSYT = value[SYT_INDEX_CONF] == '1'.code.toByte()
-            bRPM = value[RPM_INDEX_CONF] == '1'.code.toByte()
-            bVED = value[VED_INDEX_CONF] == '1'.code.toByte()
-        } else {
-            val s = String(value)
-            throw RuntimeException("Invalid configuration '$s'")
-        }
+        //if (value.size == CONF_SIZE) {
+        bGPS = if (GPS_INDEX_CONF<value.size) value[GPS_INDEX_CONF] == '1'.code.toByte() else false
+        bDHT = if (DHT_INDEX_CONF<value.size) value[DHT_INDEX_CONF] == '1'.code.toByte() else false
+        bBME = if (BME_INDEX_CONF<value.size) value[BME_INDEX_CONF] == '1'.code.toByte() else false
+        bSTW = if (STW_INDEX_CONF<value.size) value[STW_INDEX_CONF] == '1'.code.toByte() else false
+        bSYT = if (SYT_INDEX_CONF<value.size) value[SYT_INDEX_CONF] == '1'.code.toByte() else false
+        bRPM = if (RPM_INDEX_CONF<value.size) value[RPM_INDEX_CONF] == '1'.code.toByte() else false
+        bVED = if (VED_INDEX_CONF<value.size) value[VED_INDEX_CONF] == '1'.code.toByte() else false
+        bSRC = if (KEEP_N2K_SRC_INDEX_CONF<value.size) value[KEEP_N2K_SRC_INDEX_CONF] == '1'.code.toByte() else false
+        bSEA_TEMP = if (SEA_TEMP_INDEX_CONF<value.size) value[SEA_TEMP_INDEX_CONF] == '1'.code.toByte() else false
+        bSTW_PADDLE = if (STW_PADDLE_INDEX_CONF<value.size) value[STW_PADDLE_INDEX_CONF] == '1'.code.toByte() else false
+        //} else {
+        //    val s = String(value)
+        //    throw RuntimeException("Invalid configuration '$s'")
+        //}
     }
 
     fun toByteArray(): ByteArray {
@@ -57,6 +67,9 @@ class Conf {
         v[STW_INDEX_CONF] = (if (bSTW) '1' else '0').code.toByte()
         v[RPM_INDEX_CONF] = (if (bRPM) '1' else '0').code.toByte()
         v[VED_INDEX_CONF] = (if (bVED) '1' else '0').code.toByte()
+        v[KEEP_N2K_SRC_INDEX_CONF] = (if (bSRC) '1' else '0').code.toByte()
+        v[SEA_TEMP_INDEX_CONF] = (if (bSEA_TEMP) '1' else '0').code.toByte()
+        v[STW_PADDLE_INDEX_CONF] = (if (bSTW_PADDLE) '1' else '0').code.toByte()
         return v
     }
 
@@ -67,4 +80,7 @@ class Conf {
     var bRPM: Boolean = false
     var bSTW: Boolean = false
     var bBME: Boolean = false
+    var bSRC: Boolean = false
+    var bSEA_TEMP: Boolean = false
+    var bSTW_PADDLE: Boolean = false
 }
