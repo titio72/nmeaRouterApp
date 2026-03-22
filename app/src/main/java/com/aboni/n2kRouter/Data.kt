@@ -87,8 +87,7 @@ class Data {
     var canActive = IntValue(1, false)
     var engineHours = IntValue(4, false)
     var utcTime = TimeValue()
-    var svc = IntValue(1, false)
-    var svc10 = IntValue(2, false)
+    var servicesValue = IntValue(2, false)
     var rpmAdj = DoubleValue(4, false, 0.0001)
     var n2kSrc = IntValue(1, false)
 
@@ -104,85 +103,69 @@ class Data {
     var version = -1
 
     fun parse(data: ByteArray) {
-        var offset = 0
-        if (data[0].toInt()>=10) {
-            version = data[0].toInt()
-            /*
-              << (uint8_t)BUFFER_LAYOUT_VERSION   // version
-              << _gpsFix      // 1 1
-              << _atmo        // 4 2
-              << _temp        // 2 6
-              << _hum         // 2 8
-              << _lat         // 4 10
-              << _lon         // 4 14
-              << _mem         // 4 18
-              << _canbus      // 1 22
-              << _canbus_s    // 4 23
-              << _canbus_e    // 4 27
-              << _sog         // 2 31
-              << _cog         // 2 33
-              << _rpm         // 2 35
-              << _engine_time // 4 37
-              << _timestamp   // 4 41
-              << _services    // 2 45
-              << _rpmAdj      // 4 47
-              << _current     // 2 51
-              << _voltage     // 2 53
-              << _soc         // 2 55
-              << _n2k_source  // 1 57
-              << _stw         // 2 58
-              << _water_temp  // 2 60
-              << _stw_adjustment        // 4 62
-              << _sea_temp_adjustment;  // 4 66 plenty of room in 128 byte buffer
-            */
-            offset = 1
-            offset = gpsFix.parse(data, offset)
-            offset = atmo.parse(data, offset)
-            offset = temp.parse(data, offset)
-            offset = hum.parse(data, offset)
-            offset = lat.parse(data, offset)
-            offset = lon.parse(data, offset)
-            offset = heap.parse(data, offset) // 18
-            offset = canActive.parse(data, offset)
-            offset = canSent.parse(data, offset)
-            offset = canErrors.parse(data, offset)
-            offset = sog.parse(data, offset) // 31
-            offset = cog.parse(data, offset) // 33
-            offset = rpm.parse(data, offset)
-            offset = engineHours.parse(data, offset)
-            offset = utcTime.parse(data, offset) // 41
-            offset = svc10.parse(data, offset)
-            offset = rpmAdj.parse(data, offset)
-            offset = current.parse(data, offset)
-            offset = volts.parse(data, offset)
-            offset = soc.parse(data, offset)
-            offset = n2kSrc.parse(data, offset) // 57
-            offset = stwPaddle.parse(data, offset) // 58
-            seaTemp.parse(data, offset) // 60
-        } else {
-            version = 0
-            offset = gpsFix.parse(data, offset)
-            offset = atmo.parse(data, offset)
-            offset = temp.parse(data, offset)
-            offset = hum.parse(data, offset)
-            offset = lat.parse(data, offset)
-            offset = lon.parse(data, offset)
-            offset = heap.parse(data, offset)
-            offset = canActive.parse(data, offset)
-            offset = canSent.parse(data, offset)
-            offset = canErrors.parse(data, offset)
-            offset = sog.parse(data, offset)
-            offset = cog.parse(data, offset)
-            offset = rpm.parse(data, offset)
-            offset = engineHours.parse(data, offset)
-            offset = utcTime.parse(data, offset)
-            offset = svc.parse(data, offset)
-            offset = rpmAdj.parse(data, offset)
-            offset = current.parse(data, offset)
-            offset = volts.parse(data, offset)
-            offset = soc.parse(data, offset)
-            n2kSrc.parse(data, offset)
+        if (data.isEmpty()) {
+            appendLog("WARNING: empty telemetry payload")
+            return
         }
+
+        version = data[0].toInt()
+        if (version < 10) {
+            appendLog("WARNING: unsupported telemetry payload version=$version")
+            return
+        }
+
+        var offset = 1
+        /*
+          << (uint8_t)BUFFER_LAYOUT_VERSION   // version
+          << _gpsFix      // 1 1
+          << _atmo        // 4 2
+          << _temp        // 2 6
+          << _hum         // 2 8
+          << _lat         // 4 10
+          << _lon         // 4 14
+          << _mem         // 4 18
+          << _canbus      // 1 22
+          << _canbus_s    // 4 23
+          << _canbus_e    // 4 27
+          << _sog         // 2 31
+          << _cog         // 2 33
+          << _rpm         // 2 35
+          << _engine_time // 4 37
+          << _timestamp   // 4 41
+          << _services    // 2 45
+          << _rpmAdj      // 4 47
+          << _current     // 2 51
+          << _voltage     // 2 53
+          << _soc         // 2 55
+          << _n2k_source  // 1 57
+          << _stw         // 2 58
+          << _water_temp  // 2 60
+          << _stw_adjustment        // 4 62
+          << _sea_temp_adjustment;  // 4 66 plenty of room in 128 byte buffer
+        */
+        offset = gpsFix.parse(data, offset)
+        offset = atmo.parse(data, offset)
+        offset = temp.parse(data, offset)
+        offset = hum.parse(data, offset)
+        offset = lat.parse(data, offset)
+        offset = lon.parse(data, offset)
+        offset = heap.parse(data, offset) // 18
+        offset = canActive.parse(data, offset)
+        offset = canSent.parse(data, offset)
+        offset = canErrors.parse(data, offset)
+        offset = sog.parse(data, offset) // 31
+        offset = cog.parse(data, offset) // 33
+        offset = rpm.parse(data, offset)
+        offset = engineHours.parse(data, offset)
+        offset = utcTime.parse(data, offset) // 41
+        offset = servicesValue.parse(data, offset)
+        offset = rpmAdj.parse(data, offset)
+        offset = current.parse(data, offset)
+        offset = volts.parse(data, offset)
+        offset = soc.parse(data, offset)
+        offset = n2kSrc.parse(data, offset) // 57
+        offset = stwPaddle.parse(data, offset) // 58
+        seaTemp.parse(data, offset) // 60
 
         if (canSent.valid) {
             if (lastCanSent != -1) {
@@ -200,6 +183,6 @@ class Data {
     }
 
     fun getServices(): IntValue {
-        return if (version>=10) svc10 else svc
+        return servicesValue
     }
 }

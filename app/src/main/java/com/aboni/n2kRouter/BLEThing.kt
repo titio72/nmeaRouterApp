@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattDescriptor
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothProfile
+import android.bluetooth.BluetoothStatusCodes
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanResult
@@ -51,7 +52,7 @@ interface BLEThing {
     fun sendHeartbeat()
 }
 
-class BLEThingImpl(private val context: Context): BLEThing {
+class BLEThingImpl(private val context: Context) : BLEThing {
 
     var hostVersion: Int = 0
 
@@ -96,70 +97,58 @@ class BLEThingImpl(private val context: Context): BLEThing {
 
     // region save configuration commands
     @SuppressLint("MissingPermission")
+    private fun writeCommand(payload: String): Boolean {
+        val gatt = connectedGatt
+        val cmd = characteristicCommand
+        if (gatt == null || cmd == null) {
+            appendLog("WARN: dropping command '$payload' (gatt=${gatt != null}, cmd=${cmd != null})")
+            return false
+        }
+        val status = gatt.writeCharacteristic(
+            cmd,
+            payload.toByteArray(Charsets.UTF_8),
+            BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+        )
+        if (status != BluetoothStatusCodes.SUCCESS) {
+            appendLog("WARN: failed to queue command '$payload' status=$status")
+        }
+        return status == BluetoothStatusCodes.SUCCESS
+    }
+
+    @SuppressLint("MissingPermission")
     override fun saveConfiguration(conf: Conf) {
         this.conf.copyFrom(conf)
         val v = conf.toByteArray()
-        characteristicConf?.let {
-            connectedGatt?.writeCharacteristic(characteristicConf!!, v, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT)
-        }
+        val s = String(v)
+        writeCommand("S$s")
     }
 
     @SuppressLint("MissingPermission")
     override fun saveDeviceName(n: String) {
-        characteristicCommand?.let {
-            connectedGatt?.writeCharacteristic(
-                characteristicCommand!!,
-                ("N$n").toByteArray(Charsets.UTF_8),
-                BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-            )
-        }
+        writeCommand("N$n")
     }
 
     @SuppressLint("MissingPermission")
     override fun saveRPMCalibration(rpm: Int) {
-        characteristicCommand?.let {
-            connectedGatt?.writeCharacteristic(
-                characteristicCommand!!,
-                ("T$rpm").toByteArray(Charsets.UTF_8),
-                BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-            )
-        }
+        writeCommand("T$rpm")
     }
 
     @SuppressLint("MissingPermission")
     override fun saveEngineHours(h: Int, m: Int) {
         val s = h * 3600 + m * 60
-        characteristicCommand?.let {
-            connectedGatt?.writeCharacteristic(
-                characteristicCommand!!,
-                ("H$s").toByteArray(Charsets.UTF_8),
-                BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-            )
-        }
+        writeCommand("H$s")
     }
 
     @SuppressLint("MissingPermission")
     override fun saveRPMAdjustment(value: Double) {
-        characteristicCommand?.let {
-            val scale = 100
-            val iValue = (value * scale).toInt()
-            connectedGatt?.writeCharacteristic(
-                characteristicCommand!!,
-                ("t$iValue").toByteArray(Charsets.UTF_8),
-                BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-            )
-        }
+        val scale = 100
+        val iValue = (value * scale).toInt()
+        writeCommand("t$iValue")
     }
 
     @SuppressLint("MissingPermission")
     override fun sendHeartbeat() {
-        characteristicCommand?.let {
-            connectedGatt?.writeCharacteristic(
-                characteristicCommand!!,
-                ("h").toByteArray(Charsets.UTF_8),
-                BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-            )
-        }
+        writeCommand("h")
     }
     // endregion
 
@@ -190,7 +179,7 @@ class BLEThingImpl(private val context: Context): BLEThing {
         disconnect()
         val d: BluetoothDevice? = if (deviceToConnectTo==null) null else deviceList.getOrDefault(deviceToConnectTo, null)
         if (d!=null) {
-            lifecycleStatus = BLELifecycleState.Connect
+            transitionLifecycleStatus(BLELifecycleState.Connect)
             d.connectGatt(context, false, gattCallback)
         }
     }
@@ -200,7 +189,7 @@ class BLEThingImpl(private val context: Context): BLEThing {
         connectedGatt?.disconnect()
         connectedGatt?.close()
         setConnectedGattToNull()
-        lifecycleStatus = BLELifecycleState.Off
+        transitionLifecycleStatus(BLELifecycleState.Off)
     }
 
     @SuppressLint("MissingPermission")
@@ -230,11 +219,28 @@ class BLEThingImpl(private val context: Context): BLEThing {
         appendLog("Subscribed to ${characteristic.uuid} $res")
     }
 
+    @Synchronized
     private fun setConnectedGattToNull() {
         connectedGatt = null
         characteristicConf = null
         characteristicData = null
         characteristicCommand = null
+    }
+
+    @Synchronized
+    private fun setConnectedGatt(gatt: BluetoothGatt, service: android.bluetooth.BluetoothGattService) {
+        connectedGatt = gatt
+        characteristicConf = service.getCharacteristic(CHARACTERISTIC_CONF_UUID)
+        characteristicData = service.getCharacteristic(CHARACTERISTIC_DATA_UUID)
+        characteristicCommand = service.getCharacteristic(CHARACTERISTIC_CMD_UUID)
+    }
+
+    @Synchronized
+    private fun transitionLifecycleStatus(status: BLELifecycleState) {
+        if (lifecycleStatus != status) {
+            appendLog("lifecycle ${lifecycleStatus} -> $status")
+        }
+        lifecycleStatus = status
     }
     //endregion
 
@@ -315,28 +321,22 @@ class BLEThingImpl(private val context: Context): BLEThing {
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
                     appendLog("Connected to $deviceAddress")
                     saveToFile()
-                    lifecycleStatus = BLELifecycleState.Discover
+                    transitionLifecycleStatus(BLELifecycleState.Discover)
                     val res = gatt.requestMtu(128)
                     appendLog("Request mtu $res")
                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                     appendLog("Disconnected from $deviceAddress")
                     setConnectedGattToNull()
                     gatt.close()
-                    lifecycleStatus = BLELifecycleState.Off
+                    transitionLifecycleStatus(BLELifecycleState.Off)
                 }
             } else {
                 // TODO: random error 133 - close() and try reconnect
                 appendLog("ERROR: onConnectionStateChange status=$status deviceAddress=$deviceAddress, disconnecting")
                 setConnectedGattToNull()
                 gatt.close()
-                lifecycleStatus = BLELifecycleState.Off
+                transitionLifecycleStatus(BLELifecycleState.Off)
             }
-        }
-
-        @SuppressLint("MissingPermission")
-        override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
-            appendLog("onMtuChanged New MTU $mtu status $status")
-            gatt?.discoverServices()
         }
 
         @SuppressLint("MissingPermission")
@@ -354,12 +354,15 @@ class BLEThingImpl(private val context: Context): BLEThing {
                 gatt.disconnect()
                 return
             }
-            connectedGatt = gatt
-            characteristicConf = service.getCharacteristic(CHARACTERISTIC_CONF_UUID)
-            characteristicData = service.getCharacteristic(CHARACTERISTIC_DATA_UUID)
-            characteristicCommand = service.getCharacteristic(CHARACTERISTIC_CMD_UUID)
-            lifecycleStatus = BLELifecycleState.Connected
+            setConnectedGatt(gatt, service)
+            transitionLifecycleStatus(BLELifecycleState.Connected)
             read(0, gatt)
+        }
+
+        @SuppressLint("MissingPermission")
+        override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
+            appendLog("onMtuChanged New MTU $mtu status $status")
+            gatt?.discoverServices()
         }
 
         override fun onCharacteristicRead(gatt: BluetoothGatt, c: BluetoothGattCharacteristic, value: ByteArray, status: Int) {
@@ -420,7 +423,7 @@ class BLEThingImpl(private val context: Context): BLEThing {
             val b = fis.readBytes()
             fis.close()
             return String(b)
-        } catch (e: FileNotFoundException) {
+        } catch (_: FileNotFoundException) {
             return null
         }
     }
@@ -435,3 +438,5 @@ class BLEThingImpl(private val context: Context): BLEThing {
     }
     //endregion
 }
+
+

@@ -22,9 +22,11 @@ class Conf {
         bBME = c.bBME
         bDHT = c.bDHT
         bRPM = c.bRPM
-        bSTW = c.bSYT
+        bSTW = c.bSTW
         bVED = c.bVED
         bSRC = c.bSRC
+        bSEA_TEMP = c.bSEA_TEMP
+        bSTW_PADDLE = c.bSTW_PADDLE
     }
 
     fun copyFrom(v: Int) {
@@ -37,7 +39,7 @@ class Conf {
         bVED = (v and 0x0040) != 0
         bSRC = (v and 0x0080) != 0
         bSEA_TEMP = (v and 0x0100) != 0
-        bSTW_PADDLE = (v and 0x0200) != 0;
+        bSTW_PADDLE = (v and 0x0200) != 0
     }
 
     fun copyFrom(value: ByteArray) {

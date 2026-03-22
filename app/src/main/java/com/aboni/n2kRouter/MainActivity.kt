@@ -33,7 +33,7 @@ class MainActivity : BLEN2KListener, BLEApp() {
     //endregion
 
     //region pages
-    private class N2KPagerAdapter(val context: Context, ble: BLEThing): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private class N2KPagerAdapter(context: Context, ble: BLEThing): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         class N2KViewPlaceHolder(context: Context): FrameLayout(context) {
 
@@ -110,6 +110,7 @@ class MainActivity : BLEN2KListener, BLEApp() {
     }
 
     override fun onDestroy() {
+        timer.cancel()
         ble.disconnect()
         super.onDestroy()
     }

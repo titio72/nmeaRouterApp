@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
+import androidx.compose.runtime.structuralEqualityPolicy
 import com.google.android.material.switchmaterial.SwitchMaterial
 import androidx.core.graphics.toColorInt
 
@@ -19,8 +20,6 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
     //region widgets
     private val buttonSave: ImageButton
         get() = findViewById(R.id.buttonSave)
-    private val buttonSaveRPMCalibration: ImageButton
-        get() = findViewById(R.id.buttonSaveRPMCalibration)
     private val buttonSaveDeviceName: ImageButton
         get() = findViewById(R.id.buttonSaveDeviceName)
     private val buttonSaveEngineHours: ImageButton
@@ -91,7 +90,6 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
         buttonSave.setOnClickListener { v -> onSaveClick(v) }
         buttonSaveDeviceName.setOnClickListener { onSaveDeviceNameClick() }
         buttonSaveEngineHours.setOnClickListener { onSaveEngineHoursClick() }
-        buttonSaveRPMCalibration.setOnClickListener { onSaveRPMCalibration() }
         buttonSaveRPMAdjustment.setOnClickListener { onSaveRPMAdjustment() }
     }
 
@@ -99,9 +97,10 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
         buttonSave.isEnabled = enable
         buttonSaveEngineHours.isEnabled = enable
         buttonSaveDeviceName.isEnabled = enable
-        buttonSaveRPMCalibration.isEnabled = enable
         buttonSaveRPMAdjustment.isEnabled = enable
     }
+
+    var resetServices = true
 
     override fun onStatus(status: BLELifecycleState, scanning: Boolean) {
         post {
@@ -112,6 +111,7 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
             } else {
                 editDeviceName.text = "".toEditable()
                 deviceNameTxtView.text = "".toEditable()
+                resetServices = true
             }
         }
     }
@@ -122,6 +122,11 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
             if (svc.valid) {
                 val c = Conf()
                 c.copyFrom(svc.value.toInt())
+                if (resetServices) {
+                    resetServices = false
+                    syncConfSwitch(c, false)
+                }
+
                 switchGPS.trackTintList =
                     if (switchGPS.isChecked == c.bGPS) switchTintList else switchTintListDirty
                 switchBME.trackTintList =
@@ -215,21 +220,23 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
         if (t.size!=2) return
         try {
             ble?.saveEngineHours(t[0].toInt(), t[1].toInt())
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Toast.makeText(context, "Error reading engine hours $n", LENGTH_LONG).show()
         }
     }
 
-    private fun onSaveRPMCalibration() {
-        val n = editRPMCalibration.text
-        ble?.saveRPMCalibration(n.toString().toInt())
-    }
-
     private fun onSaveRPMAdjustment() {
         try {
-            val d = editRPMAdjustment.text.toString().toDouble()
-            ble?.saveRPMAdjustment(d)
-        } catch (e: Exception) {
+            // consider first the calibration value, then the adjustment
+            val rpmCal = editRPMCalibration.text
+            val rpmAdj = editRPMAdjustment.text
+            if (rpmCal.isNotEmpty() && rpmCal.toString().toIntOrNull() != null) {
+                ble?.saveRPMCalibration(rpmCal.toString().toInt())
+            } else if (rpmAdj.isNotEmpty() && rpmAdj.toString().toDoubleOrNull() != null) {
+                val d = editRPMAdjustment.text.toString().toDouble()
+                ble?.saveRPMAdjustment(d)
+            }
+        } catch (_: Exception) {
             // do nothing
         }
     }

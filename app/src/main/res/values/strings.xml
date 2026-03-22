@@ -26,7 +26,7 @@
     <string name="stw_switch">SOG STW</string>
     <string name="time_switch">GPS Time</string>
     <string name="rpm_switch">RPM</string>
-    <string name="rpm_calibration_edit_label">RPM Calibration</string>
+    <string name="rpm_calibration_edit_label">RPM Cal.</string>
     <string name="settings_card_title">Settings</string>
     <string name="data_card_title">Data</string>
     <string name="data_cog_label">COG</string>
@@ -51,7 +51,7 @@
     <string name="data_voltage_label">Voltage (V)</string>
     <string name="data_current_label">Current (A)</string>
     <string name="data_soc_label">SOC (%)</string>
-    <string name="config_rpm_adjustment">RPM Adjustment</string>
+    <string name="config_rpm_adjustment">RPM Adj.</string>
     <string name="config_button_set_text">Set</string>
     <string name="button_save_services">Save services</string>
     <string name="button_save_rpm_adjustment">Save RPM adjustment (1.0 default)</string>

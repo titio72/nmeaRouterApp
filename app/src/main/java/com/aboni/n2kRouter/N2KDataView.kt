@@ -57,7 +57,8 @@ class N2KDataView(context: Context, ble: BLEThing?) : N2KCardPage(context, ble) 
 
     override fun onData(data: Data) {
         val noValue = context.getString(R.string.NO_VALUE_STRING)
-        utcTimeTxt.text = if (data.utcTime.valid && data.utcTime.value>0) data.utcTime.asTime()!!.toString() else noValue
+        val utcTime = if (data.utcTime.valid && data.utcTime.value > 0) data.utcTime.asTime()?.toString() else null
+        utcTimeTxt.text = utcTime ?: noValue
         atmoTxtView.text = if (data.atmo.valid) formatValue(context, R.string.ATMO_FORMAT, data.atmo.value) else noValue
         tempTxtView.text = if (data.temp.valid) formatValue(context, R.string.TEMPERATURE_FORMAT, data.temp.value) else noValue
         humTxtView.text = if (data.hum.valid) formatValue(context, R.string.HUMIDITY_FORMAT, data.hum.value) else noValue
