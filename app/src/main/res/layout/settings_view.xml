@@ -2,7 +2,6 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -40,6 +39,7 @@
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="text"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonSaveDeviceName"
                 app:layout_constraintStart_toStartOf="parent"
@@ -102,6 +102,7 @@
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="text"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonSaveEngineHours"
                 app:layout_constraintStart_toStartOf="parent"
@@ -174,6 +175,7 @@
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="number"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/editRPMAdjustment"
                 app:layout_constraintStart_toStartOf="parent"
@@ -200,7 +202,6 @@
                 app:layout_constraintStart_toEndOf="@+id/lblRPMCalibration" />
 
 
-
             <EditText
                 android:id="@+id/editRPMAdjustment"
                 android:layout_width="0dp"
@@ -211,6 +212,7 @@
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="numberDecimal"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonSaveRPMAdjustment"
                 app:layout_constraintStart_toEndOf="@+id/editRPMCalibration"
@@ -254,20 +256,16 @@
                 android:layout_marginBottom="8dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/editRPMAdjustment"
                 app:layout_constraintStart_toEndOf="@+id/editRPMCalibration"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-
-
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_services"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/card_stw_calibration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/card_rpm_calibration">
@@ -276,6 +274,108 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
+            <EditText
+                android:id="@+id/editSTWAdjustment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/editSTWAlpha"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/lblSTWAdjustment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/editSTWAdjustment"
+                android:text="@string/stw_adjustment_edit_label"
+                app:layout_constraintBottom_toTopOf="@+id/editSTWAdjustment"
+                app:layout_constraintStart_toStartOf="@+id/editSTWAdjustment" />
+
+            <TextView
+                android:id="@+id/txtSTWAdjustment_Setting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/NO_VALUE_STRING"
+                android:textAlignment="viewEnd"
+                app:layout_constraintBottom_toTopOf="@+id/editSTWAdjustment"
+                app:layout_constraintEnd_toEndOf="@+id/editSTWAdjustment"
+                app:layout_constraintStart_toEndOf="@+id/lblSTWAdjustment" />
+            <EditText
+                android:id="@+id/editSTWAlpha"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/buttonSaveSTWCalibration"
+                app:layout_constraintStart_toEndOf="@+id/editSTWAdjustment"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/lblSTWAlpha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/editSTWAlpha"
+                android:text="@string/stw_alpha_edit_label"
+                app:layout_constraintBottom_toTopOf="@+id/editSTWAlpha"
+                app:layout_constraintStart_toStartOf="@+id/editSTWAlpha" />
+            <ImageButton
+                android:id="@+id/buttonSaveSTWCalibration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/round_button"
+                android:contentDescription="@string/button_save_stw_calibration"
+                android:src="@android:drawable/ic_menu_save"
+                app:layout_constraintBottom_toBottomOf="@+id/editSTWAlpha"
+                app:layout_constraintEnd_toEndOf="parent" />
+            <TextView
+                android:id="@+id/txtSTWAplha_Settings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/NO_VALUE_STRING"
+                android:textAlignment="viewEnd"
+                app:layout_constraintBottom_toBottomOf="@+id/lblSTWAlpha"
+                app:layout_constraintEnd_toEndOf="@+id/editSTWAlpha"
+                app:layout_constraintStart_toEndOf="@+id/lblSTWAlpha" />
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/editSTWAdjustment"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_services"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_stw_calibration">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableGPS"
                 android:layout_width="92dp"
@@ -286,7 +386,6 @@
                 android:textAlignment="viewStart"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableSysTime"
                 android:layout_width="92dp"
@@ -296,7 +395,6 @@
                 android:textAlignment="viewStart"
                 app:layout_constraintStart_toEndOf="@+id/checkBoxEnableGPS"
                 app:layout_constraintTop_toTopOf="@+id/checkBoxEnableGPS" />
-
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableSTW"
                 android:layout_width="92dp"
@@ -306,7 +404,6 @@
                 android:textAlignment="viewStart"
                 app:layout_constraintStart_toEndOf="@+id/checkBoxEnableSysTime"
                 app:layout_constraintTop_toTopOf="@+id/checkBoxEnableSysTime" />
-
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableDHT"
                 android:layout_width="92dp"
@@ -316,7 +413,6 @@
                 android:textAlignment="viewStart"
                 app:layout_constraintStart_toStartOf="@+id/checkBoxEnableGPS"
                 app:layout_constraintTop_toBottomOf="@+id/checkBoxEnableGPS" />
-
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableBME"
                 android:layout_width="92dp"
@@ -326,7 +422,6 @@
                 android:textAlignment="viewStart"
                 app:layout_constraintStart_toEndOf="@+id/checkBoxEnableDHT"
                 app:layout_constraintTop_toTopOf="@+id/checkBoxEnableDHT" />
-
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableRPM"
                 android:layout_width="92dp"
@@ -337,7 +432,6 @@
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@+id/checkBoxEnableDHT"
                 app:layout_constraintTop_toBottomOf="@+id/checkBoxEnableDHT" />
-
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableVED"
                 android:layout_width="92dp"
@@ -348,7 +442,6 @@
                 android:visibility="visible"
                 app:layout_constraintStart_toEndOf="@+id/checkBoxEnableRPM"
                 app:layout_constraintTop_toTopOf="@+id/checkBoxEnableRPM" />
-
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxKeepN2KSrc"
                 android:layout_width="92dp"
@@ -359,7 +452,6 @@
                 android:visibility="visible"
                 app:layout_constraintStart_toEndOf="@+id/checkBoxEnableBME"
                 app:layout_constraintTop_toTopOf="@+id/checkBoxEnableBME" />
-
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableSTWPaddle"
                 android:layout_width="92dp"
@@ -370,7 +462,6 @@
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@+id/checkBoxEnableRPM"
                 app:layout_constraintTop_toBottomOf="@+id/checkBoxEnableRPM" />
-
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxEnableWaterTemp"
                 android:layout_width="92dp"
@@ -381,7 +472,6 @@
                 android:visibility="visible"
                 app:layout_constraintStart_toEndOf="@+id/checkBoxEnableSTWPaddle"
                 app:layout_constraintTop_toTopOf="@+id/checkBoxEnableSTWPaddle" />
-
             <ImageButton
                 android:id="@+id/buttonSave"
                 android:layout_width="wrap_content"
@@ -392,9 +482,6 @@
                 android:src="@android:drawable/ic_menu_save"
                 app:layout_constraintBottom_toBottomOf="@+id/checkBoxEnableWaterTemp"
                 app:layout_constraintEnd_toEndOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

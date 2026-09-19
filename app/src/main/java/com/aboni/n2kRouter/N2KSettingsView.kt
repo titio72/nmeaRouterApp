@@ -62,7 +62,16 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
         get() = findViewById(R.id.txtRpmAdj_Settings)
     private val deviceNameTxtView: TextView
         get() = findViewById(R.id.txtDeviceName_Settings)
-
+    private val stwAdjTxtView : TextView
+        get() = findViewById(R.id.txtSTWAdjustment_Setting)
+    private val stwAdjEdit: EditText
+        get() = findViewById(R.id.editSTWAdjustment)
+    private val stwAlphaTxtView : TextView
+        get() = findViewById(R.id.txtSTWAplha_Settings)
+    private val stwAlphaEdit: EditText
+        get() = findViewById(R.id.editSTWAlpha)
+    private val buttonSaveSTWCalibration: ImageButton
+        get() = findViewById(R.id.buttonSaveSTWCalibration)
     //endregion
 
     private var switchTintList: ColorStateList? = null
@@ -91,6 +100,7 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
         buttonSaveDeviceName.setOnClickListener { onSaveDeviceNameClick() }
         buttonSaveEngineHours.setOnClickListener { onSaveEngineHoursClick() }
         buttonSaveRPMAdjustment.setOnClickListener { onSaveRPMAdjustment() }
+        buttonSaveSTWCalibration.setOnClickListener { onSaveSTWCalibration() }
     }
 
     private fun enableButtons(enable: Boolean) {
@@ -98,6 +108,7 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
         buttonSaveEngineHours.isEnabled = enable
         buttonSaveDeviceName.isEnabled = enable
         buttonSaveRPMAdjustment.isEnabled = enable
+        buttonSaveSTWCalibration.isEnabled = enable
     }
 
     var resetServices = true
@@ -164,6 +175,17 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
                 R.string.RPM_ADJ_FORMAT,
                 data.rpmAdj.value
             ) else noValue
+
+            stwAlphaTxtView.text = if (data.stwPaddleAlpha.valid) formatValue(
+                context,
+                R.string.STW_PADDLE_ALPHA_FORMAT,
+                data.stwPaddleAlpha.value
+            ) else noValue
+            stwAdjTxtView.text = if (data.stwPaddleAdjustment.valid) formatValue(
+                context,
+                R.string.STW_PADDLE_ADJUSTMENT_FORMAT,
+                data.stwPaddleAdjustment.value
+            ) else noValue
         }
     }
 
@@ -222,6 +244,21 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
             ble?.saveEngineHours(t[0].toInt(), t[1].toInt())
         } catch (_: Exception) {
             Toast.makeText(context, "Error reading engine hours $n", LENGTH_LONG).show()
+        }
+    }
+
+    private fun onSaveSTWCalibration() {
+        try {
+            if (!stwAdjEdit.text.isEmpty()) {
+                val d = stwAdjEdit.text.toString().toDouble()
+                ble?.saveSTWAdjustment(d)
+            }
+            if (!stwAlphaEdit.text.isEmpty()) {
+                val d = stwAlphaEdit.text.toString().toDouble()
+                ble?.saveSTWAlpha(d)
+            }
+        } catch (_: Exception) {
+            // do nothing
         }
     }
 

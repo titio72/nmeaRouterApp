@@ -22,29 +22,29 @@ fun byteToInt(v: ByteArray, offset: Int, size: Int): Long? {
 
 class Data {
 
-    class DoubleValue(sz: Int, sg: Boolean, sc: Double) {
-        private var iValue = IntValue(sz, sg)
+    class DoubleValue(offset: Int, sz: Int, sg: Boolean, sc: Double) {
+        private var iValue = IntValue(offset, sz,sg)
         private val scale = sc
 
         var valid = false
         var value = Double.NaN
 
-        fun parse(data: ByteArray, offset: Int): Int {
-            val newOffset = iValue.parse(data, offset)
+        fun parse(data: ByteArray) {
+            iValue.parse(data)
             valid = iValue.valid
             if (valid) value = iValue.value * scale
-            return newOffset
-
         }
     }
 
-    open class IntValue(sz: Int, sg: Boolean) {
-        private val size = sz
-        private val signed = sg
+    open class IntValue(val offset: Int, val size: Int, val signed: Boolean) {
         var value: Long = 0
         var valid: Boolean = false
 
-        fun parse(data: ByteArray, offset: Int): Int {
+        fun parse(data: ByteArray) {
+            if (data.size<=(offset+size)) {
+                valid = false
+                return
+            }
             val vv = byteToInt(data, offset, size)
             if (vv==null) {
                 valid = false
@@ -59,41 +59,77 @@ class Data {
                 else
                     valid or (data[offset] != 0xFF.toByte())
             }
-            return offset + size
         }
     }
 
-    class TimeValue : IntValue(4, false) {
+    class TimeValue(offset: Int) : IntValue(offset,4, false) {
         fun asTime(): Instant? {
             return if (valid) Instant.ofEpochSecond(value) else null
         }
     }
+    /*
+    Field	        Start	Size	Type	    End
+    version	        0	    1	    uint8_t	    1
+    _gpsFix	        1	    1	    int8_t	    2
+    _atmo	        2	    4	    uint32_t	6
+    _temp	        6	    2	    int16_t	    8
+    _hum	        8	    2	    int16_t	    10
+    _lat	        10	    4	    int32_t	    14
+    _lon	        14	    4	    int32_t	    18
+    _mem	        18	    4	    int32_t	    22
+    _canbus	        22	    1	    int8_t	    23
+    _canbus_s	    23	    4	    int32_t	    27
+    _canbus_e	    27	    4	    int32_t	    31
+    _sog	        31	    2	    int16_t	    33
+    _cog	        33	    2	    int16_t	    35
+    _rpm	        35	    2	    uint16_t	37
+    _engine_time	37	    4	    uint32_t	41
+    _timestamp	    41	    4	    int32_t	    45
+    _services	    45	    2	    uint16_t	47
+    _rpmAdj	        47	    4	    uint32_t	51
+    _current	    51	    2	    int16_t	    53
+    _voltage	    53	    2	    int16_t	    55
+    _soc	        55	    2	    int16_t	    57
+    _n2k_source	    57	    1	    uint8_t	    58
+    _stw	        58	    2	    int16_t	    60
+    _water_temp	    60	    2	    int16_t	    62
+    _stw_adjustment	62	    4	    uint32_t	66
+    _stw_alpha	    66	    4	    uint32_t	70
+    _sea_temp_adju	70	    4	    uint32_t	74
+    _sea_temp_alpha	74	    4	    uint32_t	78
 
-    var gpsFix = IntValue(1, false)
-    var atmo = DoubleValue(4, false, 0.001)
-    var temp = DoubleValue(2, true, 0.1)
-    var hum = DoubleValue(2, true, 0.01)
-    var lat = DoubleValue(4, true, 0.000001)
-    var lon = DoubleValue(4, true, 0.000001)
-    var sog = DoubleValue(2, true, 0.01)
-    var cog = DoubleValue(2, true, 0.1)
-    var soc = DoubleValue(2, true, 1.0)
-    var volts = DoubleValue(2, true, 0.01)
-    var current = DoubleValue(2, true, 0.01)
-    var rpm = IntValue(2, false)
-    var canErrors = IntValue(4, false)
-    var canSent = IntValue(4, false)
-    var heap = IntValue(4, false)
-    var canActive = IntValue(1, false)
-    var engineHours = IntValue(4, false)
-    var utcTime = TimeValue()
-    var servicesValue = IntValue(2, false)
-    var rpmAdj = DoubleValue(4, false, 0.0001)
-    var n2kSrc = IntValue(1, false)
+    */
+    var gpsFix = IntValue(1, 1, false)
+    var atmo = DoubleValue(2, 4, false, 0.001)
+    var temp = DoubleValue(6, 2, true, 0.1)
+    var hum = DoubleValue(8,2, true, 0.01)
+    var lat = DoubleValue(10,4, true, 0.000001)
+    var lon = DoubleValue(14,4, true, 0.000001)
+    var sog = DoubleValue(31,2, true, 0.01)
+    var cog = DoubleValue(33,2, true, 0.1)
+    var soc = DoubleValue(55,2, true, 1.0)
+    var volts = DoubleValue(53,2, true, 0.01)
+    var current = DoubleValue(51,2, true, 0.01)
+    var rpm = IntValue(35,2, false)
+    var canErrors = IntValue(27,4, false)
+    var canSent = IntValue(23,4, false)
+    var heap = IntValue(18,4, false)
+    var canActive = IntValue(22,1, false)
+    var engineHours = IntValue(37,4, false)
+    var utcTime = TimeValue(41)
+    var servicesValue = IntValue(45,2, false)
+    var rpmAdj = DoubleValue(47,4, false, 0.0001)
+    var n2kSrc = IntValue(57,1, false)
 
-    var stwPaddle = DoubleValue(2, true, 0.01)
-    var seaTemp = DoubleValue(2, true, 0.1)
+    var stwPaddle = DoubleValue(58,2, true, 0.01)
+    var seaTemp = DoubleValue(60,2, true, 0.1)
 
+    var stwPaddleAdjustment = DoubleValue(62,4, false, 0.01)
+    var stwPaddleAlpha = DoubleValue(66,4, false, 0.01)
+
+    var seaTempAdjustment = DoubleValue(70 , 4, false, 0.01)
+
+    var seaTempAlpha = DoubleValue(74, 4, false, 0.01)
 
     var canSentPeriod = -1
     var canErrorsPeriod = -1
@@ -114,58 +150,33 @@ class Data {
             return
         }
 
-        var offset = 1
-        /*
-          << (uint8_t)BUFFER_LAYOUT_VERSION   // version
-          << _gpsFix      // 1 1
-          << _atmo        // 4 2
-          << _temp        // 2 6
-          << _hum         // 2 8
-          << _lat         // 4 10
-          << _lon         // 4 14
-          << _mem         // 4 18
-          << _canbus      // 1 22
-          << _canbus_s    // 4 23
-          << _canbus_e    // 4 27
-          << _sog         // 2 31
-          << _cog         // 2 33
-          << _rpm         // 2 35
-          << _engine_time // 4 37
-          << _timestamp   // 4 41
-          << _services    // 2 45
-          << _rpmAdj      // 4 47
-          << _current     // 2 51
-          << _voltage     // 2 53
-          << _soc         // 2 55
-          << _n2k_source  // 1 57
-          << _stw         // 2 58
-          << _water_temp  // 2 60
-          << _stw_adjustment        // 4 62
-          << _sea_temp_adjustment;  // 4 66 plenty of room in 128 byte buffer
-        */
-        offset = gpsFix.parse(data, offset)
-        offset = atmo.parse(data, offset)
-        offset = temp.parse(data, offset)
-        offset = hum.parse(data, offset)
-        offset = lat.parse(data, offset)
-        offset = lon.parse(data, offset)
-        offset = heap.parse(data, offset) // 18
-        offset = canActive.parse(data, offset)
-        offset = canSent.parse(data, offset)
-        offset = canErrors.parse(data, offset)
-        offset = sog.parse(data, offset) // 31
-        offset = cog.parse(data, offset) // 33
-        offset = rpm.parse(data, offset)
-        offset = engineHours.parse(data, offset)
-        offset = utcTime.parse(data, offset) // 41
-        offset = servicesValue.parse(data, offset)
-        offset = rpmAdj.parse(data, offset)
-        offset = current.parse(data, offset)
-        offset = volts.parse(data, offset)
-        offset = soc.parse(data, offset)
-        offset = n2kSrc.parse(data, offset) // 57
-        offset = stwPaddle.parse(data, offset) // 58
-        seaTemp.parse(data, offset) // 60
+        gpsFix.parse(data)
+        atmo.parse(data)
+        temp.parse(data)
+        hum.parse(data)
+        lat.parse(data)
+        lon.parse(data)
+        heap.parse(data)
+        canActive.parse(data)
+        canSent.parse(data)
+        canErrors.parse(data)
+        sog.parse(data)
+        cog.parse(data)
+        rpm.parse(data)
+        engineHours.parse(data)
+        utcTime.parse(data)
+        servicesValue.parse(data)
+        rpmAdj.parse(data)
+        current.parse(data)
+        volts.parse(data)
+        soc.parse(data)
+        n2kSrc.parse(data)
+        stwPaddle.parse(data)
+        seaTemp.parse(data)
+        stwPaddleAdjustment.parse(data)
+        stwPaddleAlpha.parse(data)
+        seaTempAlpha.parse(data)
+        seaTempAdjustment.parse(data)
 
         if (canSent.valid) {
             if (lastCanSent != -1) {

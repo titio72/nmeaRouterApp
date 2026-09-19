@@ -45,6 +45,8 @@
     <string name="data_time_utc_label">UTC</string>
     <string name="txt_na">-</string>
     <string name="RPM_ADJ_FORMAT">%7.2f</string>
+    <string name="STW_PADDLE_ALPHA_FORMAT">%7.2f</string>
+    <string name="STW_PADDLE_ADJUSTMENT_FORMAT">%7.2f</string>
     <string name="scan_card_title">Devices</string>
     <string name="ved_switch">VeD</string>
     <string name="data_gps_fix_label">Fix</string>
@@ -63,4 +65,7 @@
     <string name="stw_paddle_switch">STW Paddle</string>
     <string name="water_temp_switch">Water Temp</string>
     <string name="data_sea_temp_label">Sea (°C)</string>
+    <string name="stw_adjustment_edit_label">STW Adj.</string>
+    <string name="stw_alpha_edit_label">STW Alpha</string>
+    <string name="button_save_stw_calibration">Save STW calibration</string>
 </resources>

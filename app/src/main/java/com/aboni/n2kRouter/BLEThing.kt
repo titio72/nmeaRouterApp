@@ -50,6 +50,8 @@ interface BLEThing {
     fun addListener(listener: BLEN2KListener)
     fun refreshConnection()
     fun sendHeartbeat()
+    fun saveSTWAdjustment(value: Double)
+    fun saveSTWAlpha(value: Double)
 }
 
 class BLEThingImpl(private val context: Context) : BLEThing {
@@ -149,6 +151,18 @@ class BLEThingImpl(private val context: Context) : BLEThing {
     @SuppressLint("MissingPermission")
     override fun sendHeartbeat() {
         writeCommand("h")
+    }
+
+    override fun saveSTWAdjustment(value: Double) {
+        val scale = 100
+        val iValue = (value * scale).toInt()
+        writeCommand("s$iValue")
+    }
+
+    override fun saveSTWAlpha(value: Double) {
+        val scale = 100
+        val iValue = (value * scale).toInt()
+        writeCommand("a$iValue")
     }
     // endregion
 
