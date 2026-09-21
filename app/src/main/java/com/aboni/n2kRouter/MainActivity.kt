@@ -4,10 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.ViewGroup
+import android.text.InputType
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -96,6 +100,7 @@ class MainActivity : BLEN2KListener, BLEApp() {
         }
 
         ble.addListener(this)
+        ble.setPasskeyRequestHandler(::askPasskey)
 
         pager.adapter = pageAdapter
         updateBTView()
@@ -111,12 +116,43 @@ class MainActivity : BLEN2KListener, BLEApp() {
 
     override fun onDestroy() {
         timer.cancel()
+        ble.setPasskeyRequestHandler(null)
         ble.disconnect()
+        ble.release()
         super.onDestroy()
     }
     //endregion
 
     //region UI Interaction
+    private fun askPasskey(device: DeviceItem, failure: CommandResult?, result: (String?) -> Unit) {
+        runOnUiThread {
+            if (isFinishing || isDestroyed) {
+                result(null)
+                return@runOnUiThread
+            }
+            val input = EditText(this)
+            input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
+            var answered = false
+            fun answer(value: String?) {
+                if (!answered) {
+                    answered = true
+                    result(value)
+                }
+            }
+            val name = device.name.ifEmpty { device.id }
+            val message = if (failure == null) getString(R.string.passkey_message, name)
+                else getString(R.string.passkey_message_retry, name, describeCommandResult(this, failure))
+            AlertDialog.Builder(this)
+                .setTitle(R.string.passkey_title)
+                .setMessage(message)
+                .setView(input)
+                .setPositiveButton(android.R.string.ok) { _, _ -> answer(input.text.toString().trim()) }
+                .setNegativeButton(android.R.string.cancel) { _, _ -> answer(null) }
+                .setOnCancelListener { answer(null) }
+                .show()
+        }
+    }
+
     override fun onStatus(status: BLELifecycleState, scanning: Boolean) {
         appendLog("status = $status scanning = $scanning")
         runOnUiThread {
@@ -147,6 +183,12 @@ class MainActivity : BLEN2KListener, BLEApp() {
 
     override fun onRssi(connectedDevice: DeviceItem, rssi: Int) {
         onScan(connectedDevice)
+    }
+
+    override fun onCommandResult(result: CommandResult) {
+        runOnUiThread {
+            Toast.makeText(this, describeCommandResult(this, result), Toast.LENGTH_LONG).show()
+        }
     }
     //endregion
 }

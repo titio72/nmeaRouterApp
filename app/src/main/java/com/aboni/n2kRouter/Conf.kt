@@ -13,7 +13,8 @@ class Conf {
         const val KEEP_N2K_SRC_INDEX_CONF = 7
         const val SEA_TEMP_INDEX_CONF = 8
         const val STW_PADDLE_INDEX_CONF = 9
-        const val CONF_SIZE = 10
+        const val LOG_INDEX_CONF = 10
+        const val CONF_SIZE = 11
     }
 
     fun copyFrom(c: Conf) {
@@ -27,6 +28,7 @@ class Conf {
         bSRC = c.bSRC
         bSEA_TEMP = c.bSEA_TEMP
         bSTW_PADDLE = c.bSTW_PADDLE
+        bLOG = c.bLOG
     }
 
     fun copyFrom(v: Int) {
@@ -40,6 +42,7 @@ class Conf {
         bSRC = (v and 0x0080) != 0
         bSEA_TEMP = (v and 0x0100) != 0
         bSTW_PADDLE = (v and 0x0200) != 0
+        bLOG = (v and 0x400) != 0
     }
 
     fun copyFrom(value: ByteArray) {
@@ -54,6 +57,7 @@ class Conf {
         bSRC = if (KEEP_N2K_SRC_INDEX_CONF<value.size) value[KEEP_N2K_SRC_INDEX_CONF] == '1'.code.toByte() else false
         bSEA_TEMP = if (SEA_TEMP_INDEX_CONF<value.size) value[SEA_TEMP_INDEX_CONF] == '1'.code.toByte() else false
         bSTW_PADDLE = if (STW_PADDLE_INDEX_CONF<value.size) value[STW_PADDLE_INDEX_CONF] == '1'.code.toByte() else false
+        bLOG = if (LOG_INDEX_CONF<value.size) value[LOG_INDEX_CONF] == '1'.code.toByte() else false
         //} else {
         //    val s = String(value)
         //    throw RuntimeException("Invalid configuration '$s'")
@@ -72,6 +76,7 @@ class Conf {
         v[KEEP_N2K_SRC_INDEX_CONF] = (if (bSRC) '1' else '0').code.toByte()
         v[SEA_TEMP_INDEX_CONF] = (if (bSEA_TEMP) '1' else '0').code.toByte()
         v[STW_PADDLE_INDEX_CONF] = (if (bSTW_PADDLE) '1' else '0').code.toByte()
+        v[LOG_INDEX_CONF] = (if (bLOG) '1' else '0').code.toByte()
         return v
     }
 
@@ -85,4 +90,5 @@ class Conf {
     var bSRC: Boolean = false
     var bSEA_TEMP: Boolean = false
     var bSTW_PADDLE: Boolean = false
+    var bLOG: Boolean = false
 }

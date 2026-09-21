@@ -46,6 +46,9 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
         get() = findViewById(R.id.checkBoxEnableSTWPaddle)
     private val switchWaterTemp: SwitchMaterial
         get() = findViewById(R.id.checkBoxEnableWaterTemp)
+
+    private val switchLog: SwitchMaterial
+        get() = findViewById(R.id.checkBoxEnableLog)
     private val editDeviceName: EditText
         get() = findViewById(R.id.editDeviceName)
     private val editEngineHours: EditText
@@ -158,6 +161,8 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
                     if (switchSTWPaddle.isChecked == c.bSTW_PADDLE) switchTintList else switchTintListDirty
                 switchWaterTemp.trackTintList =
                     if (switchWaterTemp.isChecked == c.bSEA_TEMP) switchTintList else switchTintListDirty
+                switchLog.trackTintList =
+                    if (switchLog.isChecked == c.bLOG) switchTintList else switchTintListDirty
 
             }
             val noValue = noValueStr(context)
@@ -209,6 +214,7 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
             conf.bSRC = switchKeepN2KSrc.isChecked
             conf.bSTW_PADDLE = switchSTWPaddle.isChecked
             conf.bSEA_TEMP = switchWaterTemp.isChecked
+            conf.bLOG = switchLog.isChecked
         } else {
             switchBME.isChecked = conf.bBME
             switchDHT.isChecked = conf.bDHT
@@ -220,6 +226,7 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
             switchKeepN2KSrc.isChecked = conf.bSRC
             switchSTWPaddle.isChecked = conf.bSTW_PADDLE
             switchWaterTemp.isChecked = conf.bSEA_TEMP
+            switchLog.isChecked = conf.bLOG
         }
     }
 

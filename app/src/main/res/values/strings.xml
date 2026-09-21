@@ -68,4 +68,15 @@
     <string name="stw_adjustment_edit_label">STW Adj.</string>
     <string name="stw_alpha_edit_label">STW Alpha</string>
     <string name="button_save_stw_calibration">Save STW calibration</string>
+    <string name="passkey_title">Passkey required</string>
+    <string name="passkey_message">Enter the passkey of %1$s to change its settings.</string>
+    <string name="passkey_message_retry">The write to %1$s failed:\n%2$s\n\nEnter the passkey again.</string>
+    <string name="cmd_sent">Settings sent to the device</string>
+    <string name="cmd_not_connected">Not connected to the device, settings not saved</string>
+    <string name="cmd_passkey_cancelled">Passkey not entered, settings not saved</string>
+    <string name="cmd_passkey_rejected">Write refused (%1$s). Pairing: %2$s</string>
+    <string name="cmd_no_pairing_attempt">no pairing attempt was seen, the stored bond may be stale or the device requires pairing again</string>
+    <string name="cmd_gatt_error">The device rejected the write: %1$s (code %2$d)</string>
+    <string name="cmd_timeout">The device did not answer the write within 15 seconds and no pairing failure was reported</string>
+    <string name="log_switch">Log</string>
 </resources>

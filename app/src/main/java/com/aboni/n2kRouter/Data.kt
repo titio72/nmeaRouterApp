@@ -50,14 +50,9 @@ class Data {
                 valid = false
             } else {
                 value = vv
-                valid = false
-                for (i in 1..<size) {
-                    valid = valid or (data[i + offset] != 0xFF.toByte())
-                }
-                valid = if (signed)
-                    valid or (data[offset] != 0x7F.toByte())
-                else
-                    valid or (data[offset] != 0xFF.toByte())
+                val invalid = if (signed) (1L shl (size * 8 - 1)) - 1   // 0x7F.. for signed
+                else (1L shl (size * 8)) - 1                            // 0xFF.. for unsigned
+                valid = vv != invalid
             }
         }
     }

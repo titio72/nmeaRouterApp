@@ -252,6 +252,7 @@
                 android:id="@+id/divider"
                 android:layout_width="1dp"
                 android:layout_height="0dp"
+                android:layout_marginStart="4dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:background="?android:attr/listDivider"
@@ -353,10 +354,12 @@
                 app:layout_constraintBottom_toBottomOf="@+id/lblSTWAlpha"
                 app:layout_constraintEnd_toEndOf="@+id/editSTWAlpha"
                 app:layout_constraintStart_toEndOf="@+id/lblSTWAlpha" />
+
             <View
                 android:id="@+id/divider1"
                 android:layout_width="1dp"
                 android:layout_height="0dp"
+                android:layout_marginStart="4dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:background="?android:attr/listDivider"
@@ -442,6 +445,16 @@
                 android:visibility="visible"
                 app:layout_constraintStart_toEndOf="@+id/checkBoxEnableRPM"
                 app:layout_constraintTop_toTopOf="@+id/checkBoxEnableRPM" />
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/checkBoxEnableLog"
+                android:layout_width="92dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:text="@string/log_switch"
+                android:textAlignment="viewStart"
+                android:visibility="visible"
+                app:layout_constraintStart_toEndOf="@+id/checkBoxEnableVED"
+                app:layout_constraintTop_toTopOf="@+id/checkBoxEnableVED" />
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/checkBoxKeepN2KSrc"
                 android:layout_width="92dp"

@@ -9,6 +9,9 @@ import android.bluetooth.BluetoothGattDescriptor
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothProfile
 import android.bluetooth.BluetoothStatusCodes
+import android.content.BroadcastReceiver
+import android.content.Intent
+import android.content.IntentFilter
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanResult
@@ -19,6 +22,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.ParcelUuid
 import java.io.FileNotFoundException
+import java.util.ArrayDeque
 import java.util.HashMap
 import java.util.UUID
 
@@ -26,7 +30,24 @@ private val SERVICE_UUID = UUID.fromString("4fafc201-1fb5-459e-8fcc-c5c9c331914b
 private val CHARACTERISTIC_CONF_UUID = UUID.fromString("beb5483e-36e1-4688-b7f5-ea07361b26a8")
 private val CHARACTERISTIC_DATA_UUID = UUID.fromString("55da66c7-801f-498d-b652-c57cb3f1b590")
 private val CHARACTERISTIC_CMD_UUID = UUID.fromString("68ad1094-0989-4e22-9f21-4df7ef390803")
+private val CHARACTERISTIC_HEARTBEAT_UUID = UUID.fromString("31a627d4-90cd-43df-8c0d-460e77fd294b")
 private val CCC_DESCRIPTOR_UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
+
+private const val GATT_INSUFFICIENT_AUTHENTICATION = 5
+private const val GATT_INSUFFICIENT_ENCRYPTION = 15
+private const val GATT_AUTH_FAIL = 137
+private const val COMMAND_TIMEOUT_MS = 15000L
+private const val EXTRA_BOND_REASON = "android.bluetooth.device.extra.REASON" // hidden in BluetoothDevice
+private const val MAX_BUSY_RETRIES = 20
+private const val BUSY_RETRY_DELAY_MS = 100L
+private const val PAIRING_VARIANT_PASSKEY = 1 // hidden in BluetoothDevice
+
+/**
+ * Asks the user for the passkey of [device]. Called on the UI thread; [result] must be invoked
+ * (on any thread) with the passkey, or null if the user gave up. [failure] is why the previous passkey was
+ * rejected, null when it is the first request.
+ */
+typealias PasskeyRequestHandler = (device: DeviceItem, failure: CommandResult?, result: (String?) -> Unit) -> Unit
 
 interface BLEThing {
     val data: Data
@@ -52,6 +73,9 @@ interface BLEThing {
     fun sendHeartbeat()
     fun saveSTWAdjustment(value: Double)
     fun saveSTWAlpha(value: Double)
+
+    fun setPasskeyRequestHandler(handler: PasskeyRequestHandler?)
+    fun release()
 }
 
 class BLEThingImpl(private val context: Context) : BLEThing {
@@ -70,6 +94,19 @@ class BLEThingImpl(private val context: Context) : BLEThing {
     private var characteristicConf: BluetoothGattCharacteristic? = null
     private var characteristicData: BluetoothGattCharacteristic? = null
     private var characteristicCommand: BluetoothGattCharacteristic? = null
+    private var characteristicHeartbeat: BluetoothGattCharacteristic? = null
+
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private val passkeyStore = PasskeyStore(context)
+    private var passkeyRequestHandler: PasskeyRequestHandler? = null
+
+    // write commands are serialized; all the queue state is touched on the main thread only
+    private val commandQueue = ArrayDeque<String>()
+    private var commandInFlight: String? = null
+    private var busyRetries = 0
+    private var waitingForPasskey = false
+    private var commandWatchdog: Runnable? = null
+    private var lastBondFailure = CommandResult.NO_BOND_FAILURE
 
     private val bluetoothManager: BluetoothManager by lazy {
         context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -92,29 +129,199 @@ class BLEThingImpl(private val context: Context) : BLEThing {
         deviceToConnectTo = readFromFile()
     }
 
+    override fun setPasskeyRequestHandler(handler: PasskeyRequestHandler?) {
+        passkeyRequestHandler = handler
+    }
+
+    override fun release() {
+        try {
+            context.unregisterReceiver(pairingReceiver)
+        } catch (_: IllegalArgumentException) {
+            // already unregistered
+        }
+    }
+
     override fun addListener(listener: BLEN2KListener) {
         listeners.remove(listener)
         listeners.add(listener)
     }
 
     // region save configuration commands
-    @SuppressLint("MissingPermission")
+    /** Queues a write on the command characteristic; it is sent once a passkey is available. */
     private fun writeCommand(payload: String): Boolean {
+        if (connectedGatt == null || characteristicCommand == null) {
+            appendLog("WARN: dropping command '$payload' (not connected)")
+            report(CommandResult(CommandResult.Kind.NotConnected))
+            return false
+        }
+        mainHandler.post {
+            commandQueue.add(payload)
+            pumpCommands()
+        }
+        return true
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun pumpCommands() {
+        if (commandInFlight != null || waitingForPasskey) return
+        val payload = commandQueue.peek() ?: return
         val gatt = connectedGatt
         val cmd = characteristicCommand
         if (gatt == null || cmd == null) {
-            appendLog("WARN: dropping command '$payload' (gatt=${gatt != null}, cmd=${cmd != null})")
-            return false
+            appendLog("WARN: dropping ${commandQueue.size} queued command(s) (not connected)")
+            commandQueue.clear()
+            report(CommandResult(CommandResult.Kind.NotConnected))
+            return
+        }
+        val address = gatt.device.address
+        if (passkeyStore.get(address) == null) {
+            requestPasskey(gatt.device, null)
+            return
         }
         val status = gatt.writeCharacteristic(
             cmd,
             payload.toByteArray(Charsets.UTF_8),
             BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
         )
-        if (status != BluetoothStatusCodes.SUCCESS) {
-            appendLog("WARN: failed to queue command '$payload' status=$status")
+        when (status) {
+            BluetoothStatusCodes.SUCCESS -> {
+                busyRetries = 0
+                commandInFlight = commandQueue.poll()
+                startCommandWatchdog(gatt.device)
+            }
+            BluetoothStatusCodes.ERROR_GATT_WRITE_REQUEST_BUSY -> {
+                if (++busyRetries <= MAX_BUSY_RETRIES) {
+                    mainHandler.postDelayed({ pumpCommands() }, BUSY_RETRY_DELAY_MS)
+                } else {
+                    appendLog("WARN: dropping command '$payload', gatt busy")
+                    busyRetries = 0
+                    commandQueue.poll()
+                    report(CommandResult(CommandResult.Kind.GattError, status))
+                    pumpCommands()
+                }
+            }
+            else -> {
+                appendLog("WARN: failed to queue command '$payload' status=$status")
+                commandQueue.poll()
+                report(CommandResult(CommandResult.Kind.GattError, status))
+                pumpCommands()
+            }
         }
-        return status == BluetoothStatusCodes.SUCCESS
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun requestPasskey(device: BluetoothDevice, failure: CommandResult?) {
+        val handler = passkeyRequestHandler
+        if (handler == null) {
+            appendLog("WARN: passkey needed but no handler, dropping ${commandQueue.size} queued command(s)")
+            commandQueue.clear()
+            report(failure ?: CommandResult(CommandResult.Kind.PasskeyCancelled))
+            return
+        }
+        waitingForPasskey = true
+        val item = DeviceItem(device.name ?: "", device.address)
+        appendLog("Asking passkey for ${device.address} failure=${failure?.kind}")
+        handler(item, failure) { passkey ->
+            mainHandler.post {
+                waitingForPasskey = false
+                if (passkey.isNullOrEmpty()) {
+                    appendLog("Passkey not provided, dropping ${commandQueue.size} queued command(s)")
+                    commandQueue.clear()
+                    report(CommandResult(CommandResult.Kind.PasskeyCancelled))
+                } else {
+                    lastBondFailure = CommandResult.NO_BOND_FAILURE
+                    passkeyStore.put(device.address, passkey)
+                    pumpCommands()
+                }
+            }
+        }
+    }
+
+    /** A write was refused for security reasons: forget the passkey and the bond, then ask again. */
+    @SuppressLint("MissingPermission")
+    private fun onCommandSecurityError(device: BluetoothDevice, status: Int) {
+        appendLog("ERROR: security error writing command to ${device.address} status=$status bondState=${device.bondState} lastBondFailure=$lastBondFailure")
+        cancelCommandWatchdog()
+        commandInFlight?.let { commandQueue.addFirst(it) }
+        commandInFlight = null
+        passkeyStore.remove(device.address)
+        removeBond(device)
+        val failure = CommandResult(CommandResult.Kind.PasskeyRejected, status, lastBondFailure)
+        lastBondFailure = CommandResult.NO_BOND_FAILURE
+        requestPasskey(device, failure)
+    }
+
+    private fun report(result: CommandResult) {
+        mainHandler.post {
+            appendLog("Command result ${result.kind} code=${result.code} bondFailure=${result.bondFailure}")
+            for (l in listeners) l.onCommandResult(result)
+        }
+    }
+
+    /** No callback for the write in flight (e.g. pairing stalled): don't leave the queue blocked and the user in the dark. */
+    private fun startCommandWatchdog(device: BluetoothDevice) {
+        cancelCommandWatchdog()
+        val r = Runnable {
+            commandWatchdog = null
+            appendLog("ERROR: no answer to command '$commandInFlight' after ${COMMAND_TIMEOUT_MS}ms")
+            if (lastBondFailure != CommandResult.NO_BOND_FAILURE) {
+                onCommandSecurityError(device, BluetoothGatt.GATT_FAILURE)
+            } else {
+                commandInFlight = null
+                report(CommandResult(CommandResult.Kind.Timeout))
+                pumpCommands()
+            }
+        }
+        commandWatchdog = r
+        mainHandler.postDelayed(r, COMMAND_TIMEOUT_MS)
+    }
+
+    private fun cancelCommandWatchdog() {
+        commandWatchdog?.let { mainHandler.removeCallbacks(it) }
+        commandWatchdog = null
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun removeBond(device: BluetoothDevice) {
+        if (device.bondState != BluetoothDevice.BOND_BONDED) return
+        try {
+            // BluetoothDevice.removeBond() is not part of the public SDK
+            val res = device.javaClass.getMethod("removeBond").invoke(device)
+            appendLog("removeBond ${device.address} -> $res")
+        } catch (e: Exception) {
+            appendLog("WARN: unable to remove bond ${device.address}: ${e.message}")
+        }
+    }
+
+    private val pairingReceiver = object : BroadcastReceiver() {
+        @SuppressLint("MissingPermission")
+        override fun onReceive(ctx: Context, intent: Intent) {
+            val device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE, BluetoothDevice::class.java) ?: return
+            if (intent.action == BluetoothDevice.ACTION_BOND_STATE_CHANGED) {
+                val state = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, -1)
+                val previous = intent.getIntExtra(BluetoothDevice.EXTRA_PREVIOUS_BOND_STATE, -1)
+                val reason = intent.getIntExtra(EXTRA_BOND_REASON, CommandResult.NO_BOND_FAILURE)
+                appendLog("Bond state ${device.address} $previous -> $state reason=$reason")
+                if (device.address == deviceToConnectTo) {
+                    if (state == BluetoothDevice.BOND_NONE && previous == BluetoothDevice.BOND_BONDING) {
+                        lastBondFailure = reason
+                    } else if (state == BluetoothDevice.BOND_BONDED) {
+                        lastBondFailure = CommandResult.NO_BOND_FAILURE
+                    }
+                }
+                return
+            }
+            val variant = intent.getIntExtra(BluetoothDevice.EXTRA_PAIRING_VARIANT, -1)
+            appendLog("Pairing request from ${device.address} variant=$variant")
+            if (variant != BluetoothDevice.PAIRING_VARIANT_PIN && variant != PAIRING_VARIANT_PASSKEY) return
+            // only answer for the device we are talking to; otherwise let the system dialog show up
+            if (device.address != deviceToConnectTo) return
+            val passkey = passkeyStore.get(device.address) ?: return
+            if (device.setPin(passkey.toByteArray(Charsets.UTF_8))) {
+                appendLog("Pairing request from ${device.address} answered with the stored passkey")
+                abortBroadcast()
+            }
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -150,7 +357,18 @@ class BLEThingImpl(private val context: Context) : BLEThing {
 
     @SuppressLint("MissingPermission")
     override fun sendHeartbeat() {
-        writeCommand("h")
+        // the heartbeat characteristic does not require pairing, so it bypasses the command queue
+        val gatt = connectedGatt
+        val hb = characteristicHeartbeat
+        if (gatt == null || hb == null) return
+        val status = gatt.writeCharacteristic(
+            hb,
+            "h".toByteArray(Charsets.UTF_8),
+            BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+        )
+        if (status != BluetoothStatusCodes.SUCCESS) {
+            appendLog("WARN: failed to queue heartbeat status=$status")
+        }
     }
 
     override fun saveSTWAdjustment(value: Double) {
@@ -165,6 +383,14 @@ class BLEThingImpl(private val context: Context) : BLEThing {
         writeCommand("a$iValue")
     }
     // endregion
+
+    init {
+        // declared after pairingReceiver so that it is initialized
+        val filter = IntentFilter(BluetoothDevice.ACTION_PAIRING_REQUEST)
+        filter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
+        filter.priority = IntentFilter.SYSTEM_HIGH_PRIORITY
+        context.registerReceiver(pairingReceiver, filter, Context.RECEIVER_EXPORTED)
+    }
 
     //region lifecycle
 
@@ -239,6 +465,16 @@ class BLEThingImpl(private val context: Context) : BLEThing {
         characteristicConf = null
         characteristicData = null
         characteristicCommand = null
+        characteristicHeartbeat = null
+        mainHandler.post {
+            cancelCommandWatchdog()
+            if (commandQueue.isNotEmpty() || commandInFlight != null) {
+                appendLog("WARN: connection lost, dropping ${commandQueue.size} queued command(s) and in flight '$commandInFlight'")
+                report(CommandResult(CommandResult.Kind.NotConnected))
+            }
+            commandQueue.clear()
+            commandInFlight = null
+        }
     }
 
     @Synchronized
@@ -247,6 +483,7 @@ class BLEThingImpl(private val context: Context) : BLEThing {
         characteristicConf = service.getCharacteristic(CHARACTERISTIC_CONF_UUID)
         characteristicData = service.getCharacteristic(CHARACTERISTIC_DATA_UUID)
         characteristicCommand = service.getCharacteristic(CHARACTERISTIC_CMD_UUID)
+        characteristicHeartbeat = service.getCharacteristic(CHARACTERISTIC_HEARTBEAT_UUID)
     }
 
     @Synchronized
@@ -390,6 +627,36 @@ class BLEThingImpl(private val context: Context) : BLEThing {
                 hostVersion = value[0].toInt()
                 data.parse(value)
                 for (l in listeners) l.onData(data)
+            }
+        }
+
+        override fun onCharacteristicWrite(gatt: BluetoothGatt, c: BluetoothGattCharacteristic, status: Int) {
+            if (!c.uuid.equals(CHARACTERISTIC_CMD_UUID)) {
+                if (status != BluetoothGatt.GATT_SUCCESS) appendLog("WARN: write ${c.uuid} status=$status")
+                return
+            }
+            mainHandler.post {
+                if (commandInFlight == null) {
+                    appendLog("WARN: unexpected command write callback status=$status")
+                    return@post
+                }
+                when (status) {
+                    BluetoothGatt.GATT_SUCCESS -> {
+                        cancelCommandWatchdog()
+                        commandInFlight = null
+                        if (commandQueue.isEmpty()) report(CommandResult(CommandResult.Kind.Sent))
+                        pumpCommands()
+                    }
+                    GATT_INSUFFICIENT_AUTHENTICATION, GATT_INSUFFICIENT_ENCRYPTION, GATT_AUTH_FAIL ->
+                        onCommandSecurityError(gatt.device, status)
+                    else -> {
+                        appendLog("WARN: command '$commandInFlight' failed status=$status")
+                        cancelCommandWatchdog()
+                        commandInFlight = null
+                        report(CommandResult(CommandResult.Kind.GattError, status))
+                        pumpCommands()
+                    }
+                }
             }
         }
 
