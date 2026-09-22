@@ -39,5 +39,7 @@
 ```
 
 ## Rules
-Do not commit: the user will stage and commit changes.
-Add tests whenever there is opportunity.
+- Do not commit: the user will stage and commit changes.
+- Add tests whenever there is opportunity.
+- Tests new features and changes.
+- Before major changes, challenge the user decisions and propose better alternatives.
