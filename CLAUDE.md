@@ -2,6 +2,7 @@
 
 ## Purpose
 - For **feature-delivery agents** on `NMEARouter`: make small, safe BLE + UI changes quickly.
+- The app works in pair with the firmware in https://github.com/titio72/n2k_router_arduino
 - Main module: `:app`; entry point: `app/src/main/java/com/aboni/n2kRouter/MainActivity.kt`.
 
 ## Fast model
@@ -37,3 +38,6 @@
 ./gradlew lintDebug
 ```
 
+## Rules
+Do not commit: the user will stage and commit changes.
+Add tests whenever there is opportunity.
