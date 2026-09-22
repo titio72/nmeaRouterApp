@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SettingRowView">
+        <attr name="rowLabel" format="string" />
+        <attr name="rowSaveDescription" format="string" />
+        <attr name="rowShowValue" format="boolean" />
+        <attr name="android:inputType" />
+    </declare-styleable>
+
+    <declare-styleable name="ServiceSectionView">
+        <attr name="sectionTitle" format="string" />
+        <attr name="sectionHasToggle" format="boolean" />
+    </declare-styleable>
+</resources>

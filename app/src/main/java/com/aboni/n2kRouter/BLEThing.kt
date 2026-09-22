@@ -73,6 +73,9 @@ interface BLEThing {
     fun sendHeartbeat()
     fun saveSTWAdjustment(value: Double)
     fun saveSTWAlpha(value: Double)
+    fun saveSeaTempAdjustment(value: Double)
+    fun saveSeaTempAlpha(value: Double)
+    fun saveBatteryCapacity(ah: Int)
 
     fun setPasskeyRequestHandler(handler: PasskeyRequestHandler?)
     fun release()
@@ -381,6 +384,22 @@ class BLEThingImpl(private val context: Context) : BLEThing {
         val scale = 100
         val iValue = (value * scale).toInt()
         writeCommand("a$iValue")
+    }
+
+    override fun saveSeaTempAdjustment(value: Double) {
+        val scale = 100
+        val iValue = (value * scale).toInt()
+        writeCommand("w$iValue")
+    }
+
+    override fun saveSeaTempAlpha(value: Double) {
+        val scale = 100
+        val iValue = (value * scale).toInt()
+        writeCommand("x$iValue")
+    }
+
+    override fun saveBatteryCapacity(ah: Int) {
+        writeCommand("B$ah")
     }
     // endregion
 

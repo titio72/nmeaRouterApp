@@ -2,14 +2,8 @@ package com.aboni.n2kRouter
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.text.Editable
-import android.view.View
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
-import androidx.compose.runtime.structuralEqualityPolicy
 import com.google.android.material.switchmaterial.SwitchMaterial
 import androidx.core.graphics.toColorInt
 
@@ -18,16 +12,19 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
     constructor(context: Context): this(context, null)
 
     //region widgets
-    private val buttonSave: ImageButton
-        get() = findViewById(R.id.buttonSave)
-    private val buttonSaveDeviceName: ImageButton
-        get() = findViewById(R.id.buttonSaveDeviceName)
-    private val buttonSaveEngineHours: ImageButton
-        get() = findViewById(R.id.buttonSaveEngineHours)
-    private val buttonSaveRPMAdjustment: ImageButton
-        get() = findViewById(R.id.buttonSaveRPMAdjustment)
+    private val sectionGPS: ServiceSectionView
+        get() = findViewById(R.id.sectionGPS)
+    private val sectionRPM: ServiceSectionView
+        get() = findViewById(R.id.sectionRPM)
+    private val sectionVED: ServiceSectionView
+        get() = findViewById(R.id.sectionVED)
+    private val sectionSTWPaddle: ServiceSectionView
+        get() = findViewById(R.id.sectionSTWPaddle)
+    private val sectionSeaTemp: ServiceSectionView
+        get() = findViewById(R.id.sectionSeaTemp)
+
     private val switchGPS: SwitchMaterial
-        get() = findViewById(R.id.checkBoxEnableGPS)
+        get() = sectionGPS.toggle
     private val switchBME: SwitchMaterial
         get() = findViewById(R.id.checkBoxEnableBME)
     private val switchDHT: SwitchMaterial
@@ -35,46 +32,50 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
     private val switchSTW: SwitchMaterial
         get() = findViewById(R.id.checkBoxEnableSTW)
     private val switchVED: SwitchMaterial
-        get() = findViewById(R.id.checkBoxEnableVED)
+        get() = sectionVED.toggle
     private val switchSYT: SwitchMaterial
         get() = findViewById(R.id.checkBoxEnableSysTime)
     private val switchRPM: SwitchMaterial
-        get() = findViewById(R.id.checkBoxEnableRPM)
+        get() = sectionRPM.toggle
+    private val switchSTWPaddle: SwitchMaterial
+        get() = sectionSTWPaddle.toggle
+    private val switchWaterTemp: SwitchMaterial
+        get() = sectionSeaTemp.toggle
     private val switchKeepN2KSrc: SwitchMaterial
         get() = findViewById(R.id.checkBoxKeepN2KSrc)
-    private val switchSTWPaddle: SwitchMaterial
-        get() = findViewById(R.id.checkBoxEnableSTWPaddle)
-    private val switchWaterTemp: SwitchMaterial
-        get() = findViewById(R.id.checkBoxEnableWaterTemp)
-
     private val switchLog: SwitchMaterial
         get() = findViewById(R.id.checkBoxEnableLog)
-    private val editDeviceName: EditText
-        get() = findViewById(R.id.editDeviceName)
-    private val editEngineHours: EditText
-        get() = findViewById(R.id.editEngineHours)
-    private val editRPMCalibration: EditText
-        get() = findViewById(R.id.editRPMCalibration)
-    private val editRPMAdjustment: EditText
-        get() = findViewById(R.id.editRPMAdjustment)
-    private val engineHTxtView: TextView
-        get() = findViewById(R.id.txtEngineH_Settings)
-    private val rpmTxtView: TextView
-        get() = findViewById(R.id.txtRpm_Settings)
-    private val rpmAdjTxtView: TextView
-        get() = findViewById(R.id.txtRpmAdj_Settings)
-    private val deviceNameTxtView: TextView
-        get() = findViewById(R.id.txtDeviceName_Settings)
-    private val stwAdjTxtView : TextView
-        get() = findViewById(R.id.txtSTWAdjustment_Setting)
-    private val stwAdjEdit: EditText
-        get() = findViewById(R.id.editSTWAdjustment)
-    private val stwAlphaTxtView : TextView
-        get() = findViewById(R.id.txtSTWAplha_Settings)
-    private val stwAlphaEdit: EditText
-        get() = findViewById(R.id.editSTWAlpha)
-    private val buttonSaveSTWCalibration: ImageButton
-        get() = findViewById(R.id.buttonSaveSTWCalibration)
+
+    private val rowDeviceName: SettingRowView
+        get() = findViewById(R.id.rowDeviceName)
+    private val rowEngineHours: SettingRowView
+        get() = findViewById(R.id.rowEngineHours)
+    private val rowRPMCalibration: SettingRowView
+        get() = findViewById(R.id.rowRPMCalibration)
+    private val rowRPMAdjustment: SettingRowView
+        get() = findViewById(R.id.rowRPMAdjustment)
+    private val rowBatteryCapacity: SettingRowView
+        get() = findViewById(R.id.rowBatteryCapacity)
+    private val rowSTWAdjustment: SettingRowView
+        get() = findViewById(R.id.rowSTWAdjustment)
+    private val rowSTWAlpha: SettingRowView
+        get() = findViewById(R.id.rowSTWAlpha)
+    private val rowSeaTempAdjustment: SettingRowView
+        get() = findViewById(R.id.rowSeaTempAdjustment)
+    private val rowSeaTempAlpha: SettingRowView
+        get() = findViewById(R.id.rowSeaTempAlpha)
+
+    private val allRows: List<SettingRowView>
+        get() = listOf(
+            rowDeviceName, rowEngineHours, rowRPMCalibration, rowRPMAdjustment, rowBatteryCapacity,
+            rowSTWAdjustment, rowSTWAlpha, rowSeaTempAdjustment, rowSeaTempAlpha
+        )
+
+    private val allToggles: List<SwitchMaterial>
+        get() = listOf(
+            switchGPS, switchSYT, switchSTW, switchDHT, switchBME, switchRPM, switchVED,
+            switchSTWPaddle, switchWaterTemp, switchKeepN2KSrc, switchLog
+        )
     //endregion
 
     private var switchTintList: ColorStateList? = null
@@ -99,32 +100,58 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
 
         switchTintList = switchGPS.trackTintList
         enableButtons(false)
-        buttonSave.setOnClickListener { v -> onSaveClick(v) }
-        buttonSaveDeviceName.setOnClickListener { onSaveDeviceNameClick() }
-        buttonSaveEngineHours.setOnClickListener { onSaveEngineHoursClick() }
-        buttonSaveRPMAdjustment.setOnClickListener { onSaveRPMAdjustment() }
-        buttonSaveSTWCalibration.setOnClickListener { onSaveSTWCalibration() }
+        allToggles.forEach { it.setOnCheckedChangeListener { _, _ -> onToggleChanged() } }
+        rowDeviceName.setOnSaveListener { ble?.saveDeviceName(rowDeviceName.text) }
+        rowEngineHours.setOnSaveListener { onSaveEngineHoursClick() }
+        rowRPMCalibration.setOnSaveListener {
+            saveInt(rowRPMCalibration) { ble?.saveRPMCalibration(it) }
+        }
+        rowRPMAdjustment.setOnSaveListener {
+            saveDecimal(rowRPMAdjustment) { ble?.saveRPMAdjustment(it) }
+        }
+        rowBatteryCapacity.setOnSaveListener {
+            val ah = parseBatteryCapacity(rowBatteryCapacity.text)
+            if (ah == null) showInvalidValue(rowBatteryCapacity) else ble?.saveBatteryCapacity(ah)
+        }
+        rowSTWAdjustment.setOnSaveListener {
+            saveDecimal(rowSTWAdjustment) { ble?.saveSTWAdjustment(it) }
+        }
+        rowSTWAlpha.setOnSaveListener {
+            saveDecimal(rowSTWAlpha) { ble?.saveSTWAlpha(it) }
+        }
+        rowSeaTempAdjustment.setOnSaveListener {
+            saveDecimal(rowSeaTempAdjustment) { ble?.saveSeaTempAdjustment(it) }
+        }
+        rowSeaTempAlpha.setOnSaveListener {
+            saveDecimal(rowSeaTempAlpha) { ble?.saveSeaTempAlpha(it) }
+        }
     }
 
     private fun enableButtons(enable: Boolean) {
-        buttonSave.isEnabled = enable
-        buttonSaveEngineHours.isEnabled = enable
-        buttonSaveDeviceName.isEnabled = enable
-        buttonSaveRPMAdjustment.isEnabled = enable
-        buttonSaveSTWCalibration.isEnabled = enable
+        allToggles.forEach { it.isEnabled = enable }
+        allRows.forEach { it.setSaveButtonEnabled(enable) }
     }
 
     var resetServices = true
+
+    /** Services as last reported by the device, null when not connected. */
+    private var deviceConf: Conf? = null
+
+    /** True while the switches are being set from the device, so that it is not echoed back as a change. */
+    private var showingDeviceConf = false
 
     override fun onStatus(status: BLELifecycleState, scanning: Boolean) {
         post {
             enableButtons(status == BLELifecycleState.Connected)
             if (status == BLELifecycleState.Connected) {
-                editDeviceName.text = ble?.getConnectedDevice()?.name?.toEditable() ?: "".toEditable()
-                deviceNameTxtView.text = ble?.getConnectedDevice()?.name?.toEditable() ?: "".toEditable()
+                val name = ble?.getConnectedDevice()?.name ?: ""
+                rowDeviceName.text = name
+                rowDeviceName.valueText = name
             } else {
-                editDeviceName.text = "".toEditable()
-                deviceNameTxtView.text = "".toEditable()
+                rowDeviceName.text = ""
+                rowDeviceName.valueText = ""
+                deviceConf = null
+                syncSectionsActive(null)
                 resetServices = true
             }
         }
@@ -138,59 +165,34 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
                 c.copyFrom(svc.value.toInt())
                 if (resetServices) {
                     resetServices = false
-                    syncConfSwitch(c, false)
+                    showConf(c)
                 }
-
-                switchGPS.trackTintList =
-                    if (switchGPS.isChecked == c.bGPS) switchTintList else switchTintListDirty
-                switchBME.trackTintList =
-                    if (switchBME.isChecked == c.bBME) switchTintList else switchTintListDirty
-                switchDHT.trackTintList =
-                    if (switchDHT.isChecked == c.bDHT) switchTintList else switchTintListDirty
-                switchSTW.trackTintList =
-                    if (switchSTW.isChecked == c.bSTW) switchTintList else switchTintListDirty
-                switchSYT.trackTintList =
-                    if (switchSYT.isChecked == c.bSYT) switchTintList else switchTintListDirty
-                switchRPM.trackTintList =
-                    if (switchRPM.isChecked == c.bRPM) switchTintList else switchTintListDirty
-                switchVED.trackTintList =
-                    if (switchVED.isChecked == c.bVED) switchTintList else switchTintListDirty
-                switchKeepN2KSrc.trackTintList =
-                    if (switchKeepN2KSrc.isChecked == c.bSRC) switchTintList else switchTintListDirty
-                switchSTWPaddle.trackTintList =
-                    if (switchSTWPaddle.isChecked == c.bSTW_PADDLE) switchTintList else switchTintListDirty
-                switchWaterTemp.trackTintList =
-                    if (switchWaterTemp.isChecked == c.bSEA_TEMP) switchTintList else switchTintListDirty
-                switchLog.trackTintList =
-                    if (switchLog.isChecked == c.bLOG) switchTintList else switchTintListDirty
-
+                onDeviceConf(c)
             }
             val noValue = noValueStr(context)
-            rpmTxtView.text = if (data.rpm.valid) formatValue(
+            rowRPMCalibration.valueText = if (data.rpm.valid) formatValue(
                 context,
                 R.string.RPM_FORMAT,
                 data.rpm.value
             ) else noValue
-            engineHTxtView.text = if (data.engineHours.valid) formatEngineHours(
+            rowEngineHours.valueText = if (data.engineHours.valid) formatEngineHours(
                 context,
                 data.engineHours.value
             ) else noValue
-            rpmAdjTxtView.text = if (data.rpmAdj.valid) formatValue(
+            rowRPMAdjustment.valueText = formatDouble(data.rpmAdj, R.string.RPM_ADJ_FORMAT, noValue)
+            rowBatteryCapacity.valueText = if (data.batteryCapacity.valid) formatValue(
                 context,
-                R.string.RPM_ADJ_FORMAT,
-                data.rpmAdj.value
+                R.string.BATTERY_CAPACITY_FORMAT,
+                data.batteryCapacity.value
             ) else noValue
-
-            stwAlphaTxtView.text = if (data.stwPaddleAlpha.valid) formatValue(
-                context,
-                R.string.STW_PADDLE_ALPHA_FORMAT,
-                data.stwPaddleAlpha.value
-            ) else noValue
-            stwAdjTxtView.text = if (data.stwPaddleAdjustment.valid) formatValue(
-                context,
-                R.string.STW_PADDLE_ADJUSTMENT_FORMAT,
-                data.stwPaddleAdjustment.value
-            ) else noValue
+            rowSTWAlpha.valueText =
+                formatDouble(data.stwPaddleAlpha, R.string.STW_PADDLE_ALPHA_FORMAT, noValue)
+            rowSTWAdjustment.valueText =
+                formatDouble(data.stwPaddleAdjustment, R.string.STW_PADDLE_ADJUSTMENT_FORMAT, noValue)
+            rowSeaTempAlpha.valueText =
+                formatDouble(data.seaTempAlpha, R.string.SEA_TEMP_ALPHA_FORMAT, noValue)
+            rowSeaTempAdjustment.valueText =
+                formatDouble(data.seaTempAdjustment, R.string.SEA_TEMP_ADJUSTMENT_FORMAT, noValue)
         }
     }
 
@@ -199,23 +201,48 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
     }
 
     override fun onConf(conf: Conf) {
-        post { syncConfSwitch(conf, false) }
+        post {
+            showConf(conf)
+            onDeviceConf(conf)
+        }
     }
 
-    private fun syncConfSwitch(conf: Conf, writeConf: Boolean) {
-        if (writeConf) {
-            conf.bBME = switchBME.isChecked
-            conf.bDHT = switchDHT.isChecked
-            conf.bGPS = switchGPS.isChecked
-            conf.bRPM = switchRPM.isChecked
-            conf.bSTW = switchSTW.isChecked
-            conf.bSYT = switchSYT.isChecked
-            conf.bVED = switchVED.isChecked
-            conf.bSRC = switchKeepN2KSrc.isChecked
-            conf.bSTW_PADDLE = switchSTWPaddle.isChecked
-            conf.bSEA_TEMP = switchWaterTemp.isChecked
-            conf.bLOG = switchLog.isChecked
-        } else {
+    private fun formatDouble(v: Data.DoubleValue, formatId: Int, noValue: String): String =
+        if (v.valid) formatValue(context, formatId, v.value) else noValue
+
+    /** Services the device runs: they unlock the sections and tell which toggles are still waiting for it. */
+    private fun onDeviceConf(c: Conf) {
+        deviceConf = c
+        syncSectionsActive(c)
+        tintIfDirty(switchGPS, c.bGPS)
+        tintIfDirty(switchBME, c.bBME)
+        tintIfDirty(switchDHT, c.bDHT)
+        tintIfDirty(switchSTW, c.bSTW)
+        tintIfDirty(switchSYT, c.bSYT)
+        tintIfDirty(switchRPM, c.bRPM)
+        tintIfDirty(switchVED, c.bVED)
+        tintIfDirty(switchKeepN2KSrc, c.bSRC)
+        tintIfDirty(switchSTWPaddle, c.bSTW_PADDLE)
+        tintIfDirty(switchWaterTemp, c.bSEA_TEMP)
+        tintIfDirty(switchLog, c.bLOG)
+    }
+
+    private fun tintIfDirty(s: SwitchMaterial, saved: Boolean) {
+        s.trackTintList = if (s.isChecked == saved) switchTintList else switchTintListDirty
+    }
+
+    /** Sections of services the device is not running (or all of them, if [saved] is null) get locked. */
+    private fun syncSectionsActive(saved: Conf?) {
+        sectionGPS.setActive(saved?.bGPS == true)
+        sectionRPM.setActive(saved?.bRPM == true)
+        sectionVED.setActive(saved?.bVED == true)
+        sectionSTWPaddle.setActive(saved?.bSTW_PADDLE == true)
+        sectionSeaTemp.setActive(saved?.bSEA_TEMP == true)
+    }
+
+    private fun showConf(conf: Conf) {
+        showingDeviceConf = true
+        try {
             switchBME.isChecked = conf.bBME
             switchDHT.isChecked = conf.bDHT
             switchSYT.isChecked = conf.bSYT
@@ -227,65 +254,52 @@ class N2KSettingsView(context: Context, ble: BLEThing?) : N2KCardPage(context, b
             switchSTWPaddle.isChecked = conf.bSTW_PADDLE
             switchWaterTemp.isChecked = conf.bSEA_TEMP
             switchLog.isChecked = conf.bLOG
+        } finally {
+            showingDeviceConf = false
         }
     }
 
-    private fun onSaveClick(v: View) {
-        if (v.id == R.id.buttonSave) {
-            val c = Conf()
-            syncConfSwitch(c, true)
-            ble?.saveConfiguration(c)
-        }
-    }
-
-    private fun onSaveDeviceNameClick() {
-        val n = editDeviceName.text
-        ble?.saveDeviceName(n.toString())
+    /** A toggle was flipped by the user: the new configuration goes to the device right away. */
+    private fun onToggleChanged() {
+        if (showingDeviceConf) return
+        val c = Conf()
+        c.bBME = switchBME.isChecked
+        c.bDHT = switchDHT.isChecked
+        c.bGPS = switchGPS.isChecked
+        c.bRPM = switchRPM.isChecked
+        c.bSTW = switchSTW.isChecked
+        c.bSYT = switchSYT.isChecked
+        c.bVED = switchVED.isChecked
+        c.bSRC = switchKeepN2KSrc.isChecked
+        c.bSTW_PADDLE = switchSTWPaddle.isChecked
+        c.bSEA_TEMP = switchWaterTemp.isChecked
+        c.bLOG = switchLog.isChecked
+        ble?.saveConfiguration(c)
+        deviceConf?.let { onDeviceConf(it) }
     }
 
     private fun onSaveEngineHoursClick() {
-        val n = editEngineHours.text
-        val t = n.split(":")
-        if (t.size!=2) return
-        try {
-            ble?.saveEngineHours(t[0].toInt(), t[1].toInt())
-        } catch (_: Exception) {
-            Toast.makeText(context, "Error reading engine hours $n", LENGTH_LONG).show()
+        val t = rowEngineHours.text.split(":")
+        val h = t.getOrNull(0)?.toIntOrNull()
+        val m = t.getOrNull(1)?.toIntOrNull()
+        if (t.size != 2 || h == null || m == null) {
+            showInvalidValue(rowEngineHours)
+            return
         }
+        ble?.saveEngineHours(h, m)
     }
 
-    private fun onSaveSTWCalibration() {
-        try {
-            if (!stwAdjEdit.text.isEmpty()) {
-                val d = stwAdjEdit.text.toString().toDouble()
-                ble?.saveSTWAdjustment(d)
-            }
-            if (!stwAlphaEdit.text.isEmpty()) {
-                val d = stwAlphaEdit.text.toString().toDouble()
-                ble?.saveSTWAlpha(d)
-            }
-        } catch (_: Exception) {
-            // do nothing
-        }
+    private fun saveInt(row: SettingRowView, save: (Int) -> Unit) {
+        val v = row.text.toIntOrNull()
+        if (v == null) showInvalidValue(row) else save(v)
     }
 
-    private fun onSaveRPMAdjustment() {
-        try {
-            // consider first the calibration value, then the adjustment
-            val rpmCal = editRPMCalibration.text
-            val rpmAdj = editRPMAdjustment.text
-            if (rpmCal.isNotEmpty() && rpmCal.toString().toIntOrNull() != null) {
-                ble?.saveRPMCalibration(rpmCal.toString().toInt())
-            } else if (rpmAdj.isNotEmpty() && rpmAdj.toString().toDoubleOrNull() != null) {
-                val d = editRPMAdjustment.text.toString().toDouble()
-                ble?.saveRPMAdjustment(d)
-            }
-        } catch (_: Exception) {
-            // do nothing
-        }
+    private fun saveDecimal(row: SettingRowView, save: (Double) -> Unit) {
+        val v = row.text.toDoubleOrNull()
+        if (v == null) showInvalidValue(row) else save(v)
     }
 
-    //region extensions
-    private fun String.toEditable(): Editable =  Editable.Factory.getInstance().newEditable(this)
-    //endregion
+    private fun showInvalidValue(row: SettingRowView) {
+        Toast.makeText(context, context.getString(R.string.invalid_value, row.label), LENGTH_LONG).show()
+    }
 }

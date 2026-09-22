@@ -30,6 +30,12 @@ fun formatEngineHours(ctx: Context, seconds: Long): String {
     return formatValue(ctx, R.string.ENGINE_HOURS_FORMAT, h, m)
 }
 
+/** Battery capacity in Ah accepted by the device: an integer in 1..999, null otherwise. */
+fun parseBatteryCapacity(text: String): Int? {
+    val ah = text.trim().toIntOrNull() ?: return null
+    return if (ah in 1..999) ah else null
+}
+
 fun formatGPSFix(ctx: Context, fix: Long): String {
     return when(fix) {
         0L -> ":("

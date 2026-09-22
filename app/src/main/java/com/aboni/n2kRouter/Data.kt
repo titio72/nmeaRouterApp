@@ -41,7 +41,7 @@ class Data {
         var valid: Boolean = false
 
         fun parse(data: ByteArray) {
-            if (data.size<=(offset+size)) {
+            if (data.size<(offset+size)) {
                 valid = false
                 return
             }
@@ -92,6 +92,7 @@ class Data {
     _stw_alpha	    66	    4	    uint32_t	70
     _sea_temp_adju	70	    4	    uint32_t	74
     _sea_temp_alpha	74	    4	    uint32_t	78
+    _battery_cap    78      2       uint16_t    80
 
     */
     var gpsFix = IntValue(1, 1, false)
@@ -103,8 +104,8 @@ class Data {
     var sog = DoubleValue(31,2, true, 0.01)
     var cog = DoubleValue(33,2, true, 0.1)
     var soc = DoubleValue(55,2, true, 1.0)
-    var volts = DoubleValue(53,2, true, 0.01)
     var current = DoubleValue(51,2, true, 0.01)
+    var volts = DoubleValue(53,2, true, 0.01)
     var rpm = IntValue(35,2, false)
     var canErrors = IntValue(27,4, false)
     var canSent = IntValue(23,4, false)
@@ -125,6 +126,8 @@ class Data {
     var seaTempAdjustment = DoubleValue(70 , 4, false, 0.01)
 
     var seaTempAlpha = DoubleValue(74, 4, false, 0.01)
+
+    var batteryCapacity = IntValue(78, 2, false)
 
     var canSentPeriod = -1
     var canErrorsPeriod = -1
@@ -172,6 +175,7 @@ class Data {
         stwPaddleAlpha.parse(data)
         seaTempAlpha.parse(data)
         seaTempAdjustment.parse(data)
+        batteryCapacity.parse(data)
 
         if (canSent.valid) {
             if (lastCanSent != -1) {

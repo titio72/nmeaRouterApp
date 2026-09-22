@@ -1,500 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_device_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/txtDeviceName_Settings"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/NO_VALUE_STRING"
-                android:textAlignment="viewEnd"
-                app:layout_constraintBottom_toTopOf="@+id/editDeviceName"
-                app:layout_constraintEnd_toEndOf="@+id/editDeviceName"
-                app:layout_constraintStart_toEndOf="@+id/lblEditDeviceName" />
-
-            <EditText
-                android:id="@+id/editDeviceName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:ems="10"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/buttonSaveDeviceName"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <TextView
-                android:id="@+id/lblEditDeviceName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:labelFor="@id/editDeviceName"
-                android:text="@string/device_name_edit_label"
-                app:layout_constraintBottom_toTopOf="@+id/editDeviceName"
-                app:layout_constraintStart_toStartOf="@+id/editDeviceName" />
-
-            <ImageButton
-                android:id="@+id/buttonSaveDeviceName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/round_button"
-                android:contentDescription="@string/button_set_device_name"
-                android:src="@android:drawable/ic_menu_save"
-                app:layout_constraintBottom_toBottomOf="@+id/editDeviceName"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <View
-                android:id="@+id/divider6"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginStart="8dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_engine_hours"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_device_name">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <EditText
-                android:id="@+id/editEngineHours"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:ems="10"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/buttonSaveEngineHours"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/lblEditEngineHours"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:labelFor="@id/editEngineHours"
-                android:text="@string/engine_hours_edit_label"
-                app:layout_constraintBottom_toTopOf="@+id/editEngineHours"
-                app:layout_constraintStart_toStartOf="@+id/editEngineHours" />
-
-            <ImageButton
-                android:id="@+id/buttonSaveEngineHours"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/round_button"
-                android:contentDescription="@string/buton_save_engine_hours"
-                android:src="@android:drawable/ic_menu_save"
-                app:layout_constraintBottom_toBottomOf="@+id/editEngineHours"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <TextView
-                android:id="@+id/txtEngineH_Settings"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/NO_VALUE_STRING"
-                android:textAlignment="viewEnd"
-                app:layout_constraintBottom_toTopOf="@+id/editEngineHours"
-                app:layout_constraintEnd_toEndOf="@+id/editEngineHours"
-                app:layout_constraintStart_toEndOf="@+id/lblEditEngineHours" />
-
-            <View
-                android:id="@+id/divider7"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginStart="8dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_rpm_calibration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_engine_hours">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <EditText
-                android:id="@+id/editRPMCalibration"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:ems="10"
-                android:importantForAutofill="no"
-                android:inputType="number"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/editRPMAdjustment"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <TextView
-                android:id="@+id/lblRPMCalibration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:labelFor="@id/editRPMCalibration"
-                android:text="@string/rpm_calibration_edit_label"
-                app:layout_constraintBottom_toTopOf="@+id/editRPMCalibration"
-                app:layout_constraintStart_toStartOf="@+id/editRPMCalibration" />
-
-            <TextView
-                android:id="@+id/txtRpm_Settings"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/NO_VALUE_STRING"
-                android:textAlignment="viewEnd"
-                app:layout_constraintBottom_toTopOf="@+id/editRPMCalibration"
-                app:layout_constraintEnd_toEndOf="@+id/editRPMCalibration"
-                app:layout_constraintStart_toEndOf="@+id/lblRPMCalibration" />
-
-
-            <EditText
-                android:id="@+id/editRPMAdjustment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:ems="10"
-                android:importantForAutofill="no"
-                android:inputType="numberDecimal"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/buttonSaveRPMAdjustment"
-                app:layout_constraintStart_toEndOf="@+id/editRPMCalibration"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/lblRPMAdjustment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:labelFor="@id/editRPMAdjustment"
-                android:text="@string/config_rpm_adjustment"
-                app:layout_constraintBottom_toTopOf="@+id/editRPMAdjustment"
-                app:layout_constraintStart_toStartOf="@+id/editRPMAdjustment" />
-
-            <ImageButton
-                android:id="@+id/buttonSaveRPMAdjustment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/round_button"
-                android:contentDescription="@string/button_save_rpm_adjustment"
-                android:src="@android:drawable/ic_menu_save"
-                app:layout_constraintBottom_toBottomOf="@+id/editRPMAdjustment"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <TextView
-                android:id="@+id/txtRpmAdj_Settings"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/NO_VALUE_STRING"
-                android:textAlignment="viewEnd"
-                app:layout_constraintBottom_toBottomOf="@+id/lblRPMAdjustment"
-                app:layout_constraintEnd_toEndOf="@+id/editRPMAdjustment"
-                app:layout_constraintStart_toEndOf="@+id/lblRPMAdjustment" />
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/editRPMCalibration"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_stw_calibration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_rpm_calibration">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <EditText
-                android:id="@+id/editSTWAdjustment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:ems="10"
-                android:importantForAutofill="no"
-                android:inputType="number"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/editSTWAlpha"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/lblSTWAdjustment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:labelFor="@id/editSTWAdjustment"
-                android:text="@string/stw_adjustment_edit_label"
-                app:layout_constraintBottom_toTopOf="@+id/editSTWAdjustment"
-                app:layout_constraintStart_toStartOf="@+id/editSTWAdjustment" />
-
-            <TextView
-                android:id="@+id/txtSTWAdjustment_Setting"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/NO_VALUE_STRING"
-                android:textAlignment="viewEnd"
-                app:layout_constraintBottom_toTopOf="@+id/editSTWAdjustment"
-                app:layout_constraintEnd_toEndOf="@+id/editSTWAdjustment"
-                app:layout_constraintStart_toEndOf="@+id/lblSTWAdjustment" />
-            <EditText
-                android:id="@+id/editSTWAlpha"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:ems="10"
-                android:importantForAutofill="no"
-                android:inputType="numberDecimal"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/buttonSaveSTWCalibration"
-                app:layout_constraintStart_toEndOf="@+id/editSTWAdjustment"
-                app:layout_constraintTop_toTopOf="parent" />
-            <TextView
-                android:id="@+id/lblSTWAlpha"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:labelFor="@id/editSTWAlpha"
-                android:text="@string/stw_alpha_edit_label"
-                app:layout_constraintBottom_toTopOf="@+id/editSTWAlpha"
-                app:layout_constraintStart_toStartOf="@+id/editSTWAlpha" />
-            <ImageButton
-                android:id="@+id/buttonSaveSTWCalibration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/round_button"
-                android:contentDescription="@string/button_save_stw_calibration"
-                android:src="@android:drawable/ic_menu_save"
-                app:layout_constraintBottom_toBottomOf="@+id/editSTWAlpha"
-                app:layout_constraintEnd_toEndOf="parent" />
-            <TextView
-                android:id="@+id/txtSTWAplha_Settings"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/NO_VALUE_STRING"
-                android:textAlignment="viewEnd"
-                app:layout_constraintBottom_toBottomOf="@+id/lblSTWAlpha"
-                app:layout_constraintEnd_toEndOf="@+id/editSTWAlpha"
-                app:layout_constraintStart_toEndOf="@+id/lblSTWAlpha" />
-
-            <View
-                android:id="@+id/divider1"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/editSTWAdjustment"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
         android:id="@+id/card_services"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_stw_calibration">
-        <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/checkBoxEnableGPS"
-                android:layout_width="92dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/gps_switch"
-                android:textAlignment="viewStart"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/checkBoxEnableSysTime"
-                android:layout_width="92dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/time_switch"
-                android:textAlignment="viewStart"
-                app:layout_constraintStart_toEndOf="@+id/checkBoxEnableGPS"
-                app:layout_constraintTop_toTopOf="@+id/checkBoxEnableGPS" />
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/checkBoxEnableSTW"
-                android:layout_width="92dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/stw_switch"
-                android:textAlignment="viewStart"
-                app:layout_constraintStart_toEndOf="@+id/checkBoxEnableSysTime"
-                app:layout_constraintTop_toTopOf="@+id/checkBoxEnableSysTime" />
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/checkBoxEnableDHT"
-                android:layout_width="92dp"
-                android:layout_height="36dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/dht_switch"
-                android:textAlignment="viewStart"
-                app:layout_constraintStart_toStartOf="@+id/checkBoxEnableGPS"
-                app:layout_constraintTop_toBottomOf="@+id/checkBoxEnableGPS" />
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/checkBoxEnableBME"
-                android:layout_width="92dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/bme_switch"
-                android:textAlignment="viewStart"
-                app:layout_constraintStart_toEndOf="@+id/checkBoxEnableDHT"
-                app:layout_constraintTop_toTopOf="@+id/checkBoxEnableDHT" />
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/checkBoxEnableRPM"
-                android:layout_width="92dp"
-                android:layout_height="36dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/rpm_switch"
-                android:textAlignment="viewStart"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="@+id/checkBoxEnableDHT"
-                app:layout_constraintTop_toBottomOf="@+id/checkBoxEnableDHT" />
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/checkBoxEnableVED"
-                android:layout_width="92dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/ved_switch"
-                android:textAlignment="viewStart"
-                android:visibility="visible"
-                app:layout_constraintStart_toEndOf="@+id/checkBoxEnableRPM"
-                app:layout_constraintTop_toTopOf="@+id/checkBoxEnableRPM" />
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/checkBoxEnableLog"
-                android:layout_width="92dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/log_switch"
-                android:textAlignment="viewStart"
-                android:visibility="visible"
-                app:layout_constraintStart_toEndOf="@+id/checkBoxEnableVED"
-                app:layout_constraintTop_toTopOf="@+id/checkBoxEnableVED" />
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/checkBoxKeepN2KSrc"
-                android:layout_width="92dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/keep_n2k_switch"
-                android:textAlignment="viewStart"
-                android:visibility="visible"
-                app:layout_constraintStart_toEndOf="@+id/checkBoxEnableBME"
-                app:layout_constraintTop_toTopOf="@+id/checkBoxEnableBME" />
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/checkBoxEnableSTWPaddle"
-                android:layout_width="92dp"
-                android:layout_height="36dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/stw_paddle_switch"
-                android:textAlignment="viewStart"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="@+id/checkBoxEnableRPM"
-                app:layout_constraintTop_toBottomOf="@+id/checkBoxEnableRPM" />
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/checkBoxEnableWaterTemp"
-                android:layout_width="92dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/water_temp_switch"
-                android:textAlignment="viewStart"
-                android:visibility="visible"
-                app:layout_constraintStart_toEndOf="@+id/checkBoxEnableSTWPaddle"
-                app:layout_constraintTop_toTopOf="@+id/checkBoxEnableSTWPaddle" />
-            <ImageButton
-                android:id="@+id/buttonSave"
-                android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.aboni.n2kRouter.ServiceSectionView
+                android:id="@+id/sectionSystem"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/round_button"
-                android:contentDescription="@string/button_save_services"
-                android:src="@android:drawable/ic_menu_save"
-                app:layout_constraintBottom_toBottomOf="@+id/checkBoxEnableWaterTemp"
-                app:layout_constraintEnd_toEndOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                app:sectionHasToggle="false"
+                app:sectionTitle="@string/system_section_title">
+
+                <com.aboni.n2kRouter.SettingRowView
+                    android:id="@+id/rowDeviceName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    app:rowLabel="@string/device_name_edit_label"
+                    app:rowSaveDescription="@string/button_set_device_name" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/checkBoxKeepN2KSrc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="64dp"
+                    android:minHeight="48dp"
+                    android:text="@string/keep_n2k_switch"
+                    android:textAlignment="viewStart" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/checkBoxEnableLog"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="64dp"
+                    android:minHeight="48dp"
+                    android:text="@string/log_switch"
+                    android:textAlignment="viewStart" />
+
+            </com.aboni.n2kRouter.ServiceSectionView>
+
+            <com.aboni.n2kRouter.ServiceSectionView
+                android:id="@+id/sectionGPS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:sectionTitle="@string/gps_switch">
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/checkBoxEnableSysTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="64dp"
+                    android:minHeight="48dp"
+                    android:text="@string/time_switch"
+                    android:textAlignment="viewStart" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/checkBoxEnableSTW"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="64dp"
+                    android:minHeight="48dp"
+                    android:text="@string/stw_switch"
+                    android:textAlignment="viewStart" />
+
+            </com.aboni.n2kRouter.ServiceSectionView>
+
+            <com.aboni.n2kRouter.ServiceSectionView
+                android:id="@+id/sectionMeteo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:sectionHasToggle="false"
+                app:sectionTitle="@string/meteo_section_title">
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/checkBoxEnableBME"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="64dp"
+                    android:minHeight="48dp"
+                    android:text="@string/bme_switch"
+                    android:textAlignment="viewStart" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/checkBoxEnableDHT"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="64dp"
+                    android:minHeight="48dp"
+                    android:text="@string/dht_switch"
+                    android:textAlignment="viewStart" />
+
+            </com.aboni.n2kRouter.ServiceSectionView>
+
+            <com.aboni.n2kRouter.ServiceSectionView
+                android:id="@+id/sectionRPM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:sectionTitle="@string/rpm_switch">
+
+                <com.aboni.n2kRouter.SettingRowView
+                    android:id="@+id/rowEngineHours"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    app:rowLabel="@string/engine_hours_edit_label"
+                    app:rowSaveDescription="@string/buton_save_engine_hours" />
+
+                <com.aboni.n2kRouter.SettingRowView
+                    android:id="@+id/rowRPMCalibration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    app:rowLabel="@string/rpm_calibration_edit_label"
+                    app:rowSaveDescription="@string/button_save_rpm_calibration" />
+
+                <com.aboni.n2kRouter.SettingRowView
+                    android:id="@+id/rowRPMAdjustment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    app:rowLabel="@string/config_rpm_adjustment"
+                    app:rowSaveDescription="@string/button_save_rpm_adjustment" />
+
+            </com.aboni.n2kRouter.ServiceSectionView>
+
+            <com.aboni.n2kRouter.ServiceSectionView
+                android:id="@+id/sectionVED"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:sectionTitle="@string/ved_switch">
+
+                <com.aboni.n2kRouter.SettingRowView
+                    android:id="@+id/rowBatteryCapacity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    app:rowLabel="@string/battery_capacity_edit_label"
+                    app:rowSaveDescription="@string/button_save_battery_capacity" />
+
+            </com.aboni.n2kRouter.ServiceSectionView>
+
+            <com.aboni.n2kRouter.ServiceSectionView
+                android:id="@+id/sectionSTWPaddle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:sectionTitle="@string/stw_paddle_switch">
+
+                <com.aboni.n2kRouter.SettingRowView
+                    android:id="@+id/rowSTWAdjustment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    app:rowLabel="@string/stw_adjustment_edit_label"
+                    app:rowSaveDescription="@string/button_save_stw_adjustment" />
+
+                <com.aboni.n2kRouter.SettingRowView
+                    android:id="@+id/rowSTWAlpha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    app:rowLabel="@string/stw_alpha_edit_label"
+                    app:rowSaveDescription="@string/button_save_stw_alpha" />
+
+            </com.aboni.n2kRouter.ServiceSectionView>
+
+            <com.aboni.n2kRouter.ServiceSectionView
+                android:id="@+id/sectionSeaTemp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:sectionTitle="@string/water_temp_switch">
+
+                <com.aboni.n2kRouter.SettingRowView
+                    android:id="@+id/rowSeaTempAdjustment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    app:rowLabel="@string/sea_temp_adjustment_edit_label"
+                    app:rowSaveDescription="@string/button_save_sea_temp_adjustment" />
+
+                <com.aboni.n2kRouter.SettingRowView
+                    android:id="@+id/rowSeaTempAlpha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    app:rowLabel="@string/sea_temp_alpha_edit_label"
+                    app:rowSaveDescription="@string/button_save_sea_temp_alpha" />
+
+            </com.aboni.n2kRouter.ServiceSectionView>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
