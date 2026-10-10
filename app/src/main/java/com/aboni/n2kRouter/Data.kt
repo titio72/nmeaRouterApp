@@ -50,13 +50,9 @@ class Data {
                 valid = false
             } else {
                 value = vv
-                // little endian: firmware marks invalid as 0xFF..FF (unsigned) or 0x7F,0xFF..FF (signed)
-                val msb: Byte = if (signed) 0x7F else 0xFF.toByte()
-                var invalid = data[offset + size - 1] == msb
-                for (i in 0..<size - 1) {
-                    invalid = invalid && (data[offset + i] == 0xFF.toByte())
-                }
-                valid = !invalid
+                val invalid = if (signed) (1L shl (size * 8 - 1)) - 1   // 0x7F.. for signed
+                else (1L shl (size * 8)) - 1                            // 0xFF.. for unsigned
+                valid = vv != invalid
             }
         }
     }
@@ -112,8 +108,8 @@ class Data {
     var sog = DoubleValue(31,2, true, 0.01)
     var cog = DoubleValue(33,2, true, 0.1)
     var soc = DoubleValue(55,2, true, 1.0)
-    var volts = DoubleValue(53,2, true, 0.01)
     var current = DoubleValue(51,2, true, 0.01)
+    var volts = DoubleValue(53,2, true, 0.01)
     var rpm = IntValue(35,2, false)
     var canErrors = IntValue(27,4, false)
     var canSent = IntValue(23,4, false)
@@ -145,6 +141,7 @@ class Data {
         private set
     val gpsPrecisionValid: Boolean
         get() = !gpsPrecision.isNaN()
+    var batteryCapacity = IntValue(78, 2, false)
 
     var canSentPeriod = -1
     var canErrorsPeriod = -1
@@ -196,6 +193,7 @@ class Data {
         hdop.parse(data)
         uere.parse(data)
         gpsPrecision = if (hdop.valid && uere.valid) hdop.value * uere.value else Double.NaN
+        batteryCapacity.parse(data)
 
         if (canSent.valid) {
             if (lastCanSent != -1) {

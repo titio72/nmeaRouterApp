@@ -10,4 +10,16 @@
         <attr name="monospace" format="boolean" />
         <attr name="alignStart" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="SettingRowView">
+        <attr name="rowLabel" format="string" />
+        <attr name="rowSaveDescription" format="string" />
+        <attr name="rowShowValue" format="boolean" />
+        <attr name="android:inputType" />
+    </declare-styleable>
+
+    <declare-styleable name="ServiceSectionView">
+        <attr name="sectionTitle" format="string" />
+        <attr name="sectionHasToggle" format="boolean" />
+    </declare-styleable>
 </resources>
