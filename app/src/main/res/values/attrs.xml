@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LabeledValueView">
+        <attr name="label" format="string|reference" />
+        <attr name="text" format="string|reference" />
+        <attr name="valueWidth" format="dimension">
+            <enum name="match_parent" value="-1" />
+            <enum name="wrap_content" value="-2" />
+        </attr>
+        <attr name="monospace" format="boolean" />
+        <attr name="alignStart" format="boolean" />
+    </declare-styleable>
+</resources>

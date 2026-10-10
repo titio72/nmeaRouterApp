@@ -40,6 +40,7 @@
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="text"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonSaveDeviceName"
                 app:layout_constraintStart_toStartOf="parent"
@@ -102,6 +103,7 @@
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="text"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonSaveEngineHours"
                 app:layout_constraintStart_toStartOf="parent"
@@ -174,6 +176,7 @@
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="number"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/editRPMAdjustment"
                 app:layout_constraintStart_toStartOf="parent"
@@ -200,7 +203,6 @@
                 app:layout_constraintStart_toEndOf="@+id/lblRPMCalibration" />
 
 
-
             <EditText
                 android:id="@+id/editRPMAdjustment"
                 android:layout_width="0dp"
@@ -211,6 +213,7 @@
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="numberDecimal"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonSaveRPMAdjustment"
                 app:layout_constraintStart_toEndOf="@+id/editRPMCalibration"
@@ -254,14 +257,122 @@
                 android:layout_marginBottom="8dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/editRPMAdjustment"
                 app:layout_constraintStart_toEndOf="@+id/editRPMCalibration"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_stw_calibration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_rpm_calibration">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <EditText
+                android:id="@+id/editSTWAdjustment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/editSTWAlpha"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/lblSTWAdjustment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/editRPMCalibration"
+                android:text="@string/stw_adjustment_edit_label"
+                app:layout_constraintBottom_toTopOf="@+id/editSTWAdjustment"
+                app:layout_constraintStart_toStartOf="@+id/editSTWAdjustment" />
+
+            <TextView
+                android:id="@+id/txtSTWAdjustment_Setting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/NO_VALUE_STRING"
+                android:textAlignment="viewEnd"
+                app:layout_constraintBottom_toTopOf="@+id/editSTWAdjustment"
+                app:layout_constraintEnd_toEndOf="@+id/editSTWAdjustment"
+                app:layout_constraintStart_toEndOf="@+id/lblSTWAdjustment" />
+
+
+            <EditText
+                android:id="@+id/editSTWAlpha"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:ems="10"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/buttonSaveSTWCalibration"
+                app:layout_constraintStart_toEndOf="@+id/editSTWAdjustment"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/lblSTWAlpha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/editRPMAdjustment"
+                android:text="@string/stw_alpha_edit_label"
+                app:layout_constraintBottom_toTopOf="@+id/editSTWAlpha"
+                app:layout_constraintStart_toStartOf="@+id/editSTWAlpha" />
+
+            <ImageButton
+                android:id="@+id/buttonSaveSTWCalibration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/round_button"
+                android:contentDescription="@string/button_save_rpm_adjustment"
+                android:src="@android:drawable/ic_menu_save"
+                app:layout_constraintBottom_toBottomOf="@+id/editSTWAlpha"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/txtSTWAplha_Settings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/NO_VALUE_STRING"
+                android:textAlignment="viewEnd"
+                app:layout_constraintBottom_toBottomOf="@+id/lblSTWAlpha"
+                app:layout_constraintEnd_toEndOf="@+id/editSTWAlpha"
+                app:layout_constraintStart_toEndOf="@+id/lblSTWAlpha" />
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/editSTWAdjustment"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_services"
@@ -270,7 +381,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_rpm_calibration">
+        app:layout_constraintTop_toBottomOf="@id/card_stw_calibration">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

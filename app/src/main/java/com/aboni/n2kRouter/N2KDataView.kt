@@ -1,51 +1,54 @@
 package com.aboni.n2kRouter
 
 import android.content.Context
-import android.widget.TextView
 
 class N2KDataView(context: Context, ble: BLEThing?) : N2KCardPage(context, ble) {
 
     constructor(context: Context): this(context, null)
 
     //region widgets
-    private val utcTimeTxt: TextView
+    private val utcTimeTxt: LabeledValueView
         get() = findViewById(R.id.txtTime)
-    private val atmoTxtView: TextView
+    private val atmoTxtView: LabeledValueView
         get() = findViewById(R.id.txtAtmo)
-    private val tempTxtView: TextView
+    private val tempTxtView: LabeledValueView
         get() = findViewById(R.id.txtTemp)
-    private val heapTxtView: TextView
+    private val heapTxtView: LabeledValueView
         get() = findViewById(R.id.txtHeap)
-    private val rpmTxtView: TextView
+    private val rpmTxtView: LabeledValueView
         get() = findViewById(R.id.txtRPM)
-    private val engineHTxtView: TextView
+    private val engineHTxtView: LabeledValueView
         get() = findViewById(R.id.txtEngineH)
-    private val latTxtView: TextView
+    private val latTxtView: LabeledValueView
         get() = findViewById(R.id.txtLat)
-    private val lonTxtView: TextView
+    private val lonTxtView: LabeledValueView
         get() = findViewById(R.id.txtLon)
-    private val canTxtView: TextView
+    private val canTxtView: LabeledValueView
         get() = findViewById(R.id.txtCan)
-    private val canSrcTxtView: TextView
+    private val canSrcTxtView: LabeledValueView
         get() = findViewById(R.id.txtCanSrc)
-    private val humTxtView: TextView
+    private val humTxtView: LabeledValueView
         get() = findViewById(R.id.txtHum)
-    private val cogTxtView: TextView
+    private val cogTxtView: LabeledValueView
         get() = findViewById(R.id.txtCog)
-    private val sogTxtView: TextView
+    private val sogTxtView: LabeledValueView
         get() = findViewById(R.id.txtSog)
-    private val fixTxtView: TextView
+    private val fixTxtView: LabeledValueView
         get() = findViewById(R.id.txtGPSFix)
-    private val currentTxtView: TextView
+    private val currentTxtView: LabeledValueView
         get() = findViewById(R.id.txtCurrent)
-    private val voltageTxtView: TextView
+    private val voltageTxtView: LabeledValueView
         get() = findViewById(R.id.txtVoltage)
-    private val socTxtView: TextView
+    private val socTxtView: LabeledValueView
         get() = findViewById(R.id.txtSOC)
-    private val stwTxtView: TextView
+    private val stwTxtView: LabeledValueView
         get() = findViewById(R.id.txtStw)
-    private val seaTeampTxt: TextView
+    private val seaTeampTxt: LabeledValueView
         get() = findViewById(R.id.txtSeaTemp)
+    private val magnDeviationTxt: LabeledValueView
+        get() = findViewById(R.id.txtMagneticDeviation)
+    private val accuracyTxt: LabeledValueView
+        get() = findViewById(R.id.txtGPSAccuracy)
     //endregion
 
     init {
@@ -85,5 +88,7 @@ class N2KDataView(context: Context, ble: BLEThing?) : N2KCardPage(context, ble) 
         socTxtView.text = if (data.soc.valid) formatValue(context, R.string.SPEED_FORMAT, data.soc.value) else noValue
         stwTxtView.text = if (data.stwPaddle.valid) formatValue(context, R.string.SPEED_FORMAT, data.stwPaddle.value) else noValue
         seaTeampTxt.text = if (data.seaTemp.valid) formatValue(context, R.string.TEMPERATURE_FORMAT, data.seaTemp.value) else noValue
+        magnDeviationTxt.text = if (data.magneticDeviation.valid) formatValue(context, R.string.MAGN_DEVIATION_FORMAT, data.magneticDeviation.value) else noValue
+        accuracyTxt.text = if (data.gpsPrecision.isNaN()) noValue else formatValue(context, R.string.GPS_ACCURACY_FORMAT, data.gpsPrecision)
     }
 }
