@@ -1,71 +1,36 @@
 package com.aboni.n2kRouter
 
 import android.content.Context
-import android.view.View
-import android.view.ViewGroup
-import androidx.core.view.get
-import androidx.core.view.size
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.ComposeView
+import com.aboni.marine.link.LinkStatus
+import com.aboni.marine.ui.devices.DeviceList
+import com.aboni.marine.ui.theme.MarineTheme
+import com.aboni.marine.ui.theme.ThemeMode
 
-class N2KScanView(context: Context, ble: BLEThing?) : N2KCardPage(context, ble) {
+/**
+ * The Devices card: marine-kit's DeviceList of the scanned routers. Tapping one makes it the device to connect to.
+ * [status] is the link status shown by the status bar, so both tell the same story.
+ */
+class N2KScanView(
+    context: Context,
+    ble: BLEThing?,
+    private val status: State<LinkStatus>,
+    private val themeMode: ThemeMode,
+) : N2KCardPage(context, ble) {
 
-    constructor(context: Context): this(context, null)
+    constructor(context: Context): this(context, null, mutableStateOf(LinkStatus()), ThemeMode.System)
+
     //region widgets
-    private val deviceListView: RecyclerView
+    private val deviceListView: ComposeView
         get() = findViewById(R.id.deviceList)
     //endregion
 
-    private interface OnDeviceClickedListener {
-        fun onDeviceClicked(d: DeviceListItemView)
-    }
-
-    //region list adapter
-    private class DeviceItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val theView: DeviceListItemView = view as DeviceListItemView
-    }
-
-    private class DeviceListCustomAdapter(private val dataSet: List<DeviceItem>, private val listener: OnDeviceClickedListener, private val ble: BLEThing?): RecyclerView.Adapter<DeviceItemViewHolder>() {
-
-        override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): DeviceItemViewHolder {
-            val view = DeviceListItemView(viewGroup.context)
-            view.setLayoutParams(
-                ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-            )
-            return DeviceItemViewHolder(view)
-        }
-
-        override fun onBindViewHolder(viewHolder: DeviceItemViewHolder, position: Int) {
-            viewHolder.theView.deviceItem = dataSet[position]
-            if (ble!=null)
-                viewHolder.theView.highlighted = if (ble.getConnectedDevice()!=null) dataSet[position].idMatch(ble.getConnectedDevice()!!) else false
-            else
-                viewHolder.theView.highlighted = false
-            viewHolder.theView.setOnClickListener { v ->
-                run {
-                    listener.onDeviceClicked(v as DeviceListItemView)
-                }
-            }
-        }
-
-        override fun onViewRecycled(holder: DeviceItemViewHolder) {
-            holder.theView.setOnClickListener(null)
-        }
-
-        override fun getItemCount() = dataSet.size
-    }
-
-
-    private val devicesList: MutableList<DeviceItem> = ArrayList()
-    private val deviceListAdapter =  DeviceListCustomAdapter(devicesList, object: OnDeviceClickedListener {
-        override fun onDeviceClicked(d: DeviceListItemView) {
-            setDevice(d)
-        }
-    }, ble)
-    //endregion
+    private val scanned = ScannedDevices()
+    private val devices = mutableStateOf(scanned.list)
+    private val chosenId = mutableStateOf(ble?.getDeviceToConnect())
+    private val scanning = mutableStateOf(false)
 
     init {
         initView()
@@ -73,62 +38,41 @@ class N2KScanView(context: Context, ble: BLEThing?) : N2KCardPage(context, ble) 
         setTitleResource(R.string.scan_card_title)
         setImageResource(android.R.drawable.ic_menu_search)
 
-        deviceListView.layoutManager = LinearLayoutManager(context)
-        deviceListView.adapter = deviceListAdapter
-   }
+        deviceListView.setContent {
+            MarineTheme(themeMode) {
+                DeviceList(
+                    devices = devices.value,
+                    status = status.value,
+                    chosenId = chosenId.value,
+                    onSelect = ::selectDevice,
+                    scanning = scanning.value,
+                    emptyText = context.getString(R.string.scan_no_devices),
+                )
+            }
+        }
+    }
 
     override fun onActivate() {
-        highlightDevice(ble?.getConnectedDevice()?.id)
+        chosenId.value = ble?.getDeviceToConnect()
     }
 
     override fun onHeaderImageClicked() {
         ble?.startScan()
-        resetDevices()
-    }
-
-    private fun resetDevices() {
-        for (device in devicesList) {
-            device.updateRssi(-100)
-            for (j in 0..<deviceListView.size) {
-                val dView: DeviceListItemView = (deviceListView[j] as DeviceListItemView)
-                if (dView.deviceItem.idMatch(device)) {
-                    dView.deviceItem = device
-                }
-            }
-        }
-    }
-
-    override fun onScan(device: DeviceItem) {
-        for (i in 0..<devicesList.size) {
-            if (devicesList[i].idMatch(device)) {
-                for (j in 0..<deviceListView.size) {
-                    val dView: DeviceListItemView = (deviceListView[j] as DeviceListItemView)
-                    if (dView.deviceItem.idMatch(device)) {
-                        dView.deviceItem = device
-                    }
-                }
-                return
-            }
-        }
-        devicesList.add(device)
-        deviceListAdapter.notifyItemInserted(devicesList.size - 1)
     }
 
     override fun onStatus(status: BLELifecycleState, scanning: Boolean) {
-        if (status==BLELifecycleState.Connected) {
-            highlightDevice(ble?.getConnectedDevice()?.id)
+        post { this.scanning.value = scanning }
+    }
+
+    override fun onScan(device: DeviceItem) {
+        post {
+            scanned.update(device)
+            devices.value = scanned.list
         }
     }
 
-    private fun highlightDevice(id: String?) {
-        for (i in 0..<deviceListView.size) {
-            val dView: DeviceListItemView = (deviceListView[i] as DeviceListItemView)
-            dView.highlighted = if (id!=null) (dView.deviceItem.id==id) else false
-        }
-    }
-
-    private fun setDevice(d: DeviceListItemView) {
-        highlightDevice(d.deviceItem.id)
-        ble?.setDeviceToConnect(d.deviceItem.id)
+    private fun selectDevice(id: String) {
+        chosenId.value = id
+        ble?.setDeviceToConnect(id)
     }
 }

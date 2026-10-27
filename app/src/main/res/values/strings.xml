@@ -51,6 +51,7 @@
     <string name="STW_PADDLE_ADJUSTMENT_FORMAT">%7.2f</string>
     <string name="GPS_ACCURACY_FORMAT">%5.1f</string>
     <string name="scan_card_title">Devices</string>
+    <string name="scan_no_devices">No routers found yet: tap the search icon to scan</string>
     <string name="ved_switch">VeD</string>
     <string name="data_gps_fix_label">Fix</string>
     <string name="data_voltage_label">Voltage (V)</string>
@@ -86,15 +87,5 @@
     <string name="SEA_TEMP_ALPHA_FORMAT">%7.2f</string>
     <string name="invalid_value">Invalid value for %1$s</string>
     <string name="section_expand_description">Show or hide the settings</string>
-    <string name="passkey_title">Passkey required</string>
-    <string name="passkey_message">Enter the passkey of %1$s to change its settings.</string>
-    <string name="passkey_message_retry">The write to %1$s failed:\n%2$s\n\nEnter the passkey again.</string>
-    <string name="cmd_sent">Settings sent to the device</string>
-    <string name="cmd_not_connected">Not connected to the device, settings not saved</string>
-    <string name="cmd_passkey_cancelled">Passkey not entered, settings not saved</string>
-    <string name="cmd_passkey_rejected">Write refused (%1$s). Pairing: %2$s</string>
-    <string name="cmd_no_pairing_attempt">no pairing attempt was seen, the stored bond may be stale or the device requires pairing again</string>
-    <string name="cmd_gatt_error">The device rejected the write: %1$s (code %2$d)</string>
-    <string name="cmd_timeout">The device did not answer the write within 15 seconds and no pairing failure was reported</string>
     <string name="log_switch">Log</string>
 </resources>

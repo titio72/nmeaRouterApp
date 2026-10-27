@@ -1,0 +1,3 @@
+[submodule "marine-kit"]
+	path = marine-kit
+	url = https://github.com/titio72/marine-kit.git

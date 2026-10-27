@@ -1,9 +1,5 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.N2KRouter" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
-
-    <style name="Theme.N2KRouter" parent="Base.Theme.N2KRouter" />
+<resources>
+    <!-- Launch theme only: MainActivity applies the user's Theme.Marine.* choice before inflating.
+         Night is pure black, so the launch flash never costs night vision. -->
+    <style name="Theme.N2KRouter" parent="Theme.Marine.Night" />
 </resources>

@@ -56,7 +56,7 @@ open class N2KCardPage(context: Context, val ble: BLEThing?): ConstraintLayout(c
     override fun onRssi(connectedDevice: DeviceItem, rssi: Int) {
     }
 
-    override fun onCommandResult(result: CommandResult) {
+    override fun onCommandResult(result: com.aboni.marine.link.CommandResult) {
     }
 
     open fun onActivate() {

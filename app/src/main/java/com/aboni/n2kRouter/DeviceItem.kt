@@ -25,5 +25,3 @@ class DeviceItem(var name: String, val id: String, var rssi: Int) {
         return false
     }
 }
-
-val NO_DEVICE: DeviceItem = DeviceItem("-", "-", 0)
